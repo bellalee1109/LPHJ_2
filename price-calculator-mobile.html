@@ -30,7 +30,7 @@
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   body{font-family:var(--sans);background:var(--bg);color:var(--ink);
-    font-size:15px;line-height:1.5;padding:0 0 130px;
+    font-size:15px;line-height:1.5;padding:0 0 40px;
     -webkit-font-smoothing:antialiased;font-feature-settings:'tnum' 1,'ss01' 1;}
 
   /* ─── header ─── */
@@ -59,10 +59,24 @@
     padding:14px 12px 14px 22px;border:0;background:transparent;color:var(--ink);
     -webkit-appearance:none;letter-spacing:-.01em;font-variant-numeric:tabular-nums;}
   #amt:focus{outline:none;}
+  #plusBtn{border:0;border-left:1px solid var(--ink);border-right:1px solid var(--ink);
+    background:var(--paper);color:var(--ink);
+    font-size:22px;font-weight:600;padding:0 16px;cursor:pointer;
+    font-family:var(--sans);line-height:1;}
+  #plusBtn:active{background:var(--ink);color:var(--card);}
   #addBtn{border:0;background:var(--ink);color:var(--card);
     font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.24em;
     padding:0 22px;cursor:pointer;font-family:var(--sans);}
   #addBtn:active{background:var(--accent);}
+  .running{font-size:13px;color:var(--accent);font-weight:700;
+    font-variant-numeric:tabular-nums;padding:0 0 12px;
+    display:flex;align-items:center;gap:10px;letter-spacing:.01em;}
+  .running:empty{display:none;}
+  .running .parts{color:var(--muted);font-weight:500;font-size:11.5px;
+    font-family:var(--serif);font-style:italic;letter-spacing:0;}
+  .running .clr-run{background:none;border:0;color:var(--muted);
+    font-size:9.5px;text-transform:uppercase;letter-spacing:.22em;cursor:pointer;
+    font-family:var(--sans);font-weight:700;padding:2px 0;margin-left:auto;}
 
   /* ─── live preview ─── */
   #live{margin-top:18px;}
@@ -92,7 +106,12 @@
   .section-label{font-size:9.5px;color:var(--muted);font-weight:700;
     letter-spacing:.28em;text-transform:uppercase;margin:36px 4px 14px;
     display:flex;align-items:center;gap:12px;}
+  .section-label .ttl{order:-1;}
   .section-label::after{content:'';flex:1;height:1px;background:var(--line);}
+  .section-label #clearBtn{order:1;border:0;background:none;color:var(--accent);
+    font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.22em;
+    cursor:pointer;font-family:var(--sans);padding:4px 0;}
+  .section-label #clearBtn.hidden{display:none;}
   .section-label em{font-family:var(--serif);font-style:italic;font-weight:400;
     text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink-soft);
     margin-left:4px;}
@@ -180,25 +199,6 @@
     background-repeat:no-repeat;background-position:right 14px center;padding-right:30px;}
   .setting .pad-bottom{height:6px;}
 
-  /* ─── total bar ─── */
-  .totalbar{position:fixed;left:0;right:0;bottom:0;background:var(--card);
-    border-top:1px solid var(--ink);padding:13px 18px calc(13px + env(safe-area-inset-bottom));
-    display:flex;justify-content:space-between;align-items:center;z-index:30;}
-  .totalbar.hidden{display:none;}
-  .totalbar .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;
-    letter-spacing:.2em;font-weight:600;}
-  .totalbar .l b{display:block;font-family:var(--sans);font-size:22px;
-    color:var(--ink);font-weight:700;margin-top:3px;letter-spacing:-.02em;
-    text-transform:none;font-variant-numeric:tabular-nums;}
-  .totalbar .l .sub{display:block;font-family:var(--sans);font-size:12.5px;color:var(--accent);
-    font-weight:600;letter-spacing:0;text-transform:none;margin-top:2px;font-variant-numeric:tabular-nums;}
-  .totalbar .acts{display:flex;gap:8px;}
-  .totalbar button{border:1px solid var(--ink);background:var(--card);color:var(--ink);
-    font-size:9.5px;font-weight:700;padding:10px 13px;border-radius:0;
-    text-transform:uppercase;letter-spacing:.22em;cursor:pointer;font-family:var(--sans);}
-  .totalbar button:active{background:var(--ink);color:var(--card);}
-  .totalbar .clr{color:var(--accent);border-color:var(--accent);}
-  .totalbar .clr:active{background:var(--accent);color:var(--card);}
 </style>
 </head>
 <body>
@@ -210,14 +210,19 @@
 <div class="pad">
   <div class="entry">
     <label>Amount</label>
+    <div class="running" id="running"></div>
     <div class="amt-row">
       <div class="amt-wrap"><span>$</span><input id="amt" type="number" inputmode="decimal" placeholder="0" value=""></div>
+      <button id="plusBtn" title="Add to running total">+</button>
       <button id="addBtn">Add</button>
     </div>
     <div id="live"></div>
   </div>
 
-  <div class="section-label">Ledger <em>— saved entries</em></div>
+  <div class="section-label">
+    <span class="ttl">Ledger <em>— saved entries</em></span>
+    <button id="clearBtn" class="hidden">Clear</button>
+  </div>
   <div id="list"><div class="empty">Saved entries will appear here.</div></div>
 
   <details>
@@ -257,13 +262,6 @@
   </details>
 </div>
 
-<div class="totalbar hidden" id="totalbar">
-  <div class="l">Subtotal · <span id="cnt">0</span> entries<b id="tNet">$0.00</b><span class="sub" id="tRmb">¥0.00</span></div>
-  <div class="acts">
-    <button id="csvBtn">CSV</button>
-    <button class="clr" id="clearBtn">Clear</button>
-  </div>
-</div>
 
 <script>
 const $=id=>document.getElementById(id);
@@ -273,6 +271,16 @@ let rows=[];
 
 const STORAGE_KEY='epc-mobile-v1';
 const SETTING_IDS=['promoOff','promoPer','promoMode','mbsRate','refundOn','baseOn','fx'];
+let runParts=[];
+function runSum(){return runParts.reduce((a,b)=>a+b,0);}
+function currentAmount(){return runSum()+(+$('amt').value||0);}
+function updateRunning(){
+  const r=$('running');
+  if(!runParts.length){r.innerHTML='';return;}
+  const partsTxt=runParts.map(p=>'$'+p.toFixed(2)).join(' + ');
+  r.innerHTML=`Running $${runSum().toFixed(2)} <span class="parts">= ${partsTxt} +</span><button class="clr-run" id="resetRun">Reset</button>`;
+  $('resetRun').onclick=()=>{runParts=[];updateRunning();renderLive();saveState();};
+}
 
 const REFUND=[
  [100,5],[125,6],[150,8],[175,10],[200,12],[225,13],[250,14],[275,16],[300,17],[325,19],
@@ -316,7 +324,8 @@ function saveState(){
     const blob={
       settings:Object.fromEntries(SETTING_IDS.map(id=>[id,$(id).value])),
       rows:rows,
-      amt:$('amt').value
+      amt:$('amt').value,
+      runParts:runParts
     };
     localStorage.setItem(STORAGE_KEY,JSON.stringify(blob));
   }catch(e){}
@@ -338,10 +347,11 @@ function loadState(){
     }
     if(stored&&Array.isArray(stored.rows))rows=stored.rows.filter(r=>r&&typeof r.amount==='number');
     if(stored&&typeof stored.amt==='string')$('amt').value=stored.amt;
+    if(stored&&Array.isArray(stored.runParts))runParts=stored.runParts.filter(n=>typeof n==='number'&&n>0);
   }catch(e){}
 }
 function renderLive(){
-  const v=+$('amt').value, box=$('live');
+  const v=currentAmount(), box=$('live');
   if(!(v>0)){box.innerHTML='';saveState();return;}
   const s=settings();
   const r=compute(v,s);
@@ -360,16 +370,16 @@ function renderLive(){
     </div>
     <button class="pin" id="pinBtn">Save to ledger</button>
   </div>`;
-  $('pinBtn').onclick=()=>{rows.push({amount:v,...settings()});$('amt').value='';$('amt').blur();renderLive();render();};
+  $('pinBtn').onclick=()=>{rows.push({amount:v,...settings()});runParts=[];$('amt').value='';$('amt').blur();updateRunning();renderLive();render();};
   saveState();
 }
 function render(){
   const L=$('list');
-  if(!rows.length){L.innerHTML='<div class="empty">Saved amounts will appear here.</div>';$('totalbar').classList.add('hidden');saveState();return;}
-  let t={net:0,rmb:0,saved:0,a:0},h='';
+  if(!rows.length){L.innerHTML='<div class="empty">Saved entries will appear here.</div>';$('clearBtn').classList.add('hidden');saveState();return;}
+  let h='';
   for(let i=rows.length-1;i>=0;i--){
     const row=rows[i];
-    const r=compute(row.amount,row);t.net+=r.net;t.rmb+=r.netRmb;t.saved+=r.saved;t.a+=r.a;
+    const r=compute(row.amount,row);
     const pc=r.a>0?(r.saved/r.a*100).toFixed(1):'0';
     h+=`<div class="rcard">
       <div class="rcard-head">
@@ -394,26 +404,18 @@ function render(){
   }
   L.innerHTML=h;
   L.querySelectorAll('.del').forEach(b=>b.onclick=()=>{rows.splice(+b.dataset.i,1);render();});
-  $('cnt').textContent=rows.length;
-  $('tNet').textContent=money(t.net);
-  $('tRmb').textContent=yuan(t.rmb);
-  $('totalbar').classList.remove('hidden');
+  $('clearBtn').classList.remove('hidden');
   saveState();
 }
-$('addBtn').onclick=()=>{const v=+$('amt').value;if(v>0){rows.push({amount:v,...settings()});$('amt').value='';$('amt').blur();renderLive();render();}};
+$('addBtn').onclick=()=>{const v=currentAmount();if(v>0){rows.push({amount:v,...settings()});runParts=[];$('amt').value='';$('amt').blur();updateRunning();renderLive();render();}};
+$('plusBtn').onclick=()=>{const v=+$('amt').value;if(v>0){runParts.push(v);$('amt').value='';updateRunning();renderLive();$('amt').focus();saveState();}};
 $('amt').addEventListener('input',renderLive);
 $('amt').addEventListener('keyup',renderLive);
-$('amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('addBtn').click();});
+$('amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('addBtn').click();if(e.key==='+'){e.preventDefault();$('plusBtn').click();}});
 SETTING_IDS.forEach(id=>$(id).addEventListener('input',()=>{renderLive();render();}));
 $('clearBtn').onclick=()=>{rows=[];render();};
-$('csvBtn').onclick=()=>{
-  let o=[['Amount','Promo off','After discount','MBS rewards','GST refund','Net (SGD)','Net (RMB)','Saved','Settings used']];
-  rows.forEach(row=>{const r=compute(row.amount,row);o.push([r.a.toFixed(2),r.disc.toFixed(2),r.after.toFixed(2),r.mbs.toFixed(2),r.refund.toFixed(2),r.net.toFixed(2),r.netRmb.toFixed(2),r.saved.toFixed(2),settingsNote(row)]);});
-  const csv=o.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const b=new Blob([csv],{type:'text/csv'}),u=URL.createObjectURL(b),el=document.createElement('a');
-  el.href=u;el.download='prices.csv';el.click();
-};
 loadState();
+updateRunning();
 renderLive();
 render();
 </script>
