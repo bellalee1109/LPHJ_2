@@ -12,20 +12,20 @@
     color-scheme:light;
     --serif:'Cormorant Garamond','Noto Serif TC',Georgia,'Times New Roman',serif;
     --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    --bg:#cdd2d6;
-    --card:#f7f6f2;
-    --paper:#eceae3;
-    --ink:#15171a;
-    --ink-soft:#2e3238;
-    --muted:#7d8186;
-    --line:#a4abb1;
-    --hair:#d8d6cd;
-    --accent:#9a322b;
-    --good:#15171a;
-    --good-bg:#b9bfc4;
-    --promo:#9a322b;
-    --warn:#9a322b;
-    --tag-bg:#f1e3e0;
+    --bg:#3d4f7e;
+    --card:#ffffff;
+    --paper:#e7edf5;
+    --ink:#262236;
+    --ink-soft:#3d4f7e;
+    --muted:#8a82a0;
+    --line:#cdc8b5;
+    --hair:#e8e4d4;
+    --accent:#b85a23;
+    --good:#262236;
+    --good-bg:#dde2eb;
+    --promo:#b85a23;
+    --warn:#b85a23;
+    --tag-bg:#fce5d4;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
@@ -39,10 +39,10 @@
   header h1{margin:0;font-family:var(--serif);font-size:30px;font-weight:600;
     letter-spacing:-.005em;line-height:1;color:var(--ink);}
   .settings-btn{position:absolute;top:16px;right:16px;
-    border:1px solid var(--ink);background:var(--card);color:var(--ink);
+    border:1.5px solid var(--ink);background:var(--card);color:var(--ink);
     font-size:18px;line-height:1;letter-spacing:0;
-    width:36px;height:36px;padding:0;cursor:pointer;font-family:var(--sans);
-    display:flex;align-items:center;justify-content:center;}
+    width:38px;height:38px;padding:0;cursor:pointer;font-family:var(--sans);
+    display:flex;align-items:center;justify-content:center;border-radius:999px;}
   .settings-btn:active{background:var(--ink);color:var(--card);}
   header .tag{margin:10px 0 0;font-size:9.5px;color:var(--muted);
     text-transform:uppercase;letter-spacing:.28em;font-weight:600;
@@ -52,37 +52,25 @@
   .pad{padding:22px 18px 0;}
 
   /* ─── entry card ─── */
-  .entry{background:var(--card);border:1px solid var(--line);padding:22px 20px;}
-  .entry > label{display:block;font-size:9.5px;color:var(--muted);
+  .entry{background:var(--card);border:1.5px solid var(--ink-soft);padding:22px 20px;
+    border-radius:22px;}
+  .entry > label{display:block;font-size:9.5px;color:var(--ink-soft);
     text-transform:uppercase;letter-spacing:.22em;font-weight:700;
     margin-bottom:12px;}
-  .amt-row{display:flex;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);}
+  .amt-row{display:flex;background:var(--card);border-radius:999px;overflow:hidden;
+    margin-bottom:12px;}
   .amt-wrap{position:relative;flex:1;}
-  .amt-wrap span{position:absolute;left:0;top:50%;transform:translateY(-50%);
-    color:var(--muted);font-size:20px;font-weight:400;font-family:var(--serif);font-style:italic;}
-  #amt{width:100%;font-family:var(--sans);font-size:26px;font-weight:600;
-    padding:14px 12px 14px 22px;border:0;background:transparent;color:var(--ink);
-    -webkit-appearance:none;letter-spacing:-.01em;font-variant-numeric:tabular-nums;}
+  .amt-wrap span{position:absolute;left:20px;top:50%;transform:translateY(-50%);
+    color:var(--ink-soft);font-size:20px;font-weight:700;font-family:var(--sans);}
+  #amt{width:100%;font-family:var(--sans);font-size:24px;font-weight:600;
+    padding:16px 22px 16px 38px;border:0;background:transparent;color:var(--ink);
+    -webkit-appearance:none;letter-spacing:-.01em;font-variant-numeric:tabular-nums;
+    text-align:left;}
   #amt:focus{outline:none;}
-  #plusBtn{border:0;border-left:1px solid var(--ink);border-right:1px solid var(--ink);
-    background:var(--paper);color:var(--ink);
-    font-size:22px;font-weight:600;padding:0 16px;cursor:pointer;
-    font-family:var(--sans);line-height:1;}
-  #plusBtn:active{background:var(--ink);color:var(--card);}
-  #addBtn{border:0;background:var(--ink);color:var(--card);
-    font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.24em;
-    padding:0 22px;cursor:pointer;font-family:var(--sans);}
-  #addBtn:active{background:var(--accent);}
-  .running{font-size:13px;color:var(--accent);font-weight:700;
-    font-variant-numeric:tabular-nums;padding:0 0 12px;
-    display:flex;align-items:center;gap:10px;letter-spacing:.01em;}
-  .running:empty{display:none;}
-  .running .parts{color:var(--muted);font-weight:500;font-size:11.5px;
-    font-family:var(--serif);font-style:italic;letter-spacing:0;}
-  .running .clr-run{background:none;border:0;color:var(--muted);
-    font-size:9.5px;text-transform:uppercase;letter-spacing:.22em;cursor:pointer;
-    font-family:var(--sans);font-weight:700;padding:2px 0;margin-left:auto;}
-
+  #addBtn{display:block;width:100%;border:0;background:var(--accent);color:#fff;
+    font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.28em;
+    padding:16px;cursor:pointer;font-family:var(--sans);border-radius:999px;}
+  #addBtn:active{background:var(--ink);}
   /* ─── live preview ─── */
   #live{margin-top:18px;}
   .live-box{border-top:1px solid var(--hair);padding-top:16px;}
@@ -108,37 +96,37 @@
   .pin:active{background:var(--ink);color:var(--card);}
 
   /* ─── section label ─── */
-  .section-label{font-size:9.5px;color:var(--muted);font-weight:700;
+  .section-label{font-size:9.5px;color:#dfe3ec;font-weight:700;
     letter-spacing:.28em;text-transform:uppercase;margin:36px 4px 14px;
     display:flex;align-items:center;gap:12px;}
   .section-label .ttl{order:-1;}
-  .section-label::after{content:'';flex:1;height:1px;background:var(--line);}
+  .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.25);}
   .section-label #clearBtn{order:1;border:0;background:none;color:var(--accent);
     font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.22em;
     cursor:pointer;font-family:var(--sans);padding:4px 0;}
   .section-label #clearBtn.hidden{display:none;}
   .section-label em{font-family:var(--serif);font-style:italic;font-weight:400;
-    text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink-soft);
+    text-transform:none;letter-spacing:0;font-size:13px;color:#c8cee0;
     margin-left:4px;}
 
   /* ─── quick toggle buttons ─── */
   .toggles{display:flex;gap:8px;margin:28px 0 0;}
-  .toggles button{flex:1;border:1px solid var(--line);background:var(--card);
-    padding:10px 6px 9px;cursor:pointer;font-family:var(--sans);
-    display:flex;flex-direction:column;align-items:center;gap:5px;
-    transition:border-color .15s,background .15s;}
+  .toggles button{flex:1;border:1.5px solid var(--ink-soft);background:var(--card);
+    padding:11px 6px;cursor:pointer;font-family:var(--sans);
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    border-radius:999px;transition:border-color .15s,background .15s,color .15s;}
   .toggles button:active{background:var(--paper);}
-  .toggles button .t-lbl{font-size:9px;color:var(--muted);font-weight:700;
+  .toggles button .t-lbl{font-size:9px;color:var(--ink-soft);font-weight:700;
     text-transform:uppercase;letter-spacing:.22em;}
   .toggles button .t-val{font-size:12.5px;color:var(--ink);font-weight:700;
     letter-spacing:.02em;font-variant-numeric:tabular-nums;}
-  .toggles button.off{background:var(--paper);}
+  .toggles button.off{background:var(--paper);border-color:var(--line);}
   .toggles button.off .t-val{color:var(--muted);}
-  .toggles button.on{border-color:var(--ink);}
+  .toggles button.off .t-lbl{color:var(--muted);}
 
   /* ─── compare panel ─── */
-  .compare-panel{background:var(--card);border:1px solid var(--ink);margin-bottom:14px;
-    padding:12px 14px 14px;}
+  .compare-panel{background:var(--card);border:1.5px solid var(--accent);margin-bottom:14px;
+    padding:14px 16px 16px;border-radius:20px;}
   .compare-panel:empty{display:none;}
   .compare-panel .cmp-head{display:flex;justify-content:space-between;align-items:center;
     margin-bottom:10px;font-size:9.5px;color:var(--accent);text-transform:uppercase;
@@ -153,8 +141,8 @@
   .cmp-row.head{padding-bottom:8px;border-bottom:1px solid var(--line);}
   .cmp-row.head .val{font-size:10px;color:var(--ink);text-transform:uppercase;
     letter-spacing:.16em;font-weight:700;font-family:var(--sans);}
-  .cmp-row.final{background:var(--good-bg);border-bottom:0;margin:6px -6px 0;
-    padding:8px 6px;border-radius:0;}
+  .cmp-row.final{background:var(--good-bg);border-bottom:0;margin:6px 0 0;
+    padding:10px 10px;border-radius:14px;}
   .cmp-row.final .k{color:var(--ink);font-weight:700;font-size:9.5px;
     text-transform:uppercase;letter-spacing:.2em;padding-left:6px;}
   .cmp-row.final .val{color:var(--ink);font-weight:700;font-size:14px;}
@@ -175,8 +163,8 @@
     font-weight:400;font-size:11px;margin-left:3px;}
   .cmp-trow .v{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);
     letter-spacing:-.01em;white-space:nowrap;}
-  .cmp-trow.final{background:var(--good-bg);margin:8px -8px 0;padding:10px 12px;
-    border-bottom:0;}
+  .cmp-trow.final{background:var(--good-bg);margin:8px 0 0;padding:12px 14px;
+    border-bottom:0;border-radius:14px;}
   .cmp-trow.final .k{font-size:10px;text-transform:uppercase;letter-spacing:.22em;
     color:var(--ink);font-weight:700;}
   .cmp-trow.final .v{font-size:17px;color:var(--ink);}
@@ -184,11 +172,12 @@
     font-weight:700;color:var(--accent);margin-left:4px;}
 
   /* ─── saved cards ─── */
-  .rcard{background:var(--card);border:1px solid var(--line);margin-bottom:14px;
-    position:relative;cursor:pointer;transition:border-color .15s;}
-  .rcard.compare-on{border-color:var(--ink);}
-  .rcard.compare-on::before{content:'';position:absolute;left:-1px;top:-1px;bottom:-1px;
-    width:3px;background:var(--ink);}
+  .rcard{background:var(--card);border:1.5px solid var(--ink-soft);margin-bottom:14px;
+    position:relative;cursor:pointer;transition:border-color .15s;
+    border-radius:20px;overflow:hidden;}
+  .rcard.compare-on{background:#d8e0d4;}
+  .rcard.compare-on::before{display:none;}
+  .rcard.compare-on .final{background:#d8e0d4;}
   .rcard-head{display:flex;justify-content:space-between;align-items:center;
     padding:10px 16px;border-bottom:1px solid var(--hair);}
   .rcard-head .num{font-family:var(--serif);font-size:14px;font-style:italic;
@@ -210,7 +199,7 @@
   .rcard .saved-box{text-align:right;}
   .rcard .saved-box .v{font-family:var(--sans);font-size:17px;font-weight:600;
     color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
-  .rcard .saved-box .v .pc{font-size:12px;opacity:.75;font-weight:500;margin-left:3px;letter-spacing:0;}
+  .rcard .saved-box .v .pc{font-size:12px;color:var(--accent);opacity:.55;font-weight:600;margin-left:4px;letter-spacing:0;}
   .rcard .breakdown{padding:8px 16px 14px;border-top:1px solid var(--hair);}
   .brow{display:flex;justify-content:space-between;align-items:baseline;
     font-size:12.5px;padding:7px 0;border-bottom:1px dotted var(--hair);gap:12px;}
@@ -231,8 +220,8 @@
   .rcard .final .lbl{font-size:9.5px;color:var(--ink);text-transform:uppercase;
     letter-spacing:.28em;font-weight:700;margin-top:6px;margin-bottom:6px;}
   .rcard .final .v{font-family:var(--sans);font-size:38px;font-weight:700;
-    color:var(--ink);line-height:1;letter-spacing:-.025em;font-variant-numeric:tabular-nums;}
-  .rcard .final .rmb{font-family:var(--sans);font-size:17px;color:var(--accent);
+    color:var(--accent);line-height:1;letter-spacing:-.025em;font-variant-numeric:tabular-nums;}
+  .rcard .final .rmb{font-family:var(--sans);font-size:17px;color:var(--ink-soft);
     font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
   .rcard .final .fx{font-size:10px;color:var(--muted);font-weight:600;
     margin-left:8px;letter-spacing:.18em;text-transform:uppercase;
@@ -245,19 +234,58 @@
   .settings-modal{position:fixed;inset:0;z-index:50;display:flex;
     align-items:flex-start;justify-content:center;padding:40px 16px;}
   .settings-modal.hidden{display:none;}
-  .settings-backdrop{position:absolute;inset:0;background:rgba(21,23,26,.45);}
+  .settings-backdrop{position:absolute;inset:0;background:rgba(38,34,54,.5);}
   .settings-sheet{position:relative;background:var(--card);width:100%;max-width:480px;
-    max-height:calc(100vh - 80px);overflow-y:auto;border:1px solid var(--ink);
-    -webkit-overflow-scrolling:touch;}
+    max-height:calc(100vh - 80px);overflow:hidden;border:1px solid var(--ink);
+    border-radius:22px;display:flex;flex-direction:column;}
   .settings-head{display:flex;justify-content:space-between;align-items:center;
-    padding:16px 18px;border-bottom:1px solid var(--ink);position:sticky;top:0;
-    background:var(--card);z-index:1;}
+    padding:16px 22px;border-bottom:1px solid var(--hair);
+    background:var(--card);z-index:1;flex-shrink:0;}
   .settings-head .ttl{font-size:11px;text-transform:uppercase;letter-spacing:.24em;
     font-weight:700;color:var(--ink);}
-  .settings-close{border:0;background:none;color:var(--accent);
-    font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.22em;
-    cursor:pointer;padding:4px;font-family:var(--sans);}
-  .setting{padding:8px 18px 22px;}
+  .settings-close{border:0;background:var(--accent);color:#fff;
+    font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.2em;
+    cursor:pointer;padding:9px 16px;font-family:var(--sans);border-radius:999px;}
+  .settings-close:active{background:var(--ink);}
+  .settings-sheet > .setting{overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .setting{padding:0;}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+  .sgs{padding:22px 22px;border-bottom:1px solid var(--hair);
+    display:flex;flex-direction:column;gap:14px;}
+  .sgs:last-child{border-bottom:0;padding-bottom:30px;}
+  .sg-h2{font-size:17px;font-weight:700;color:var(--ink);
+    letter-spacing:-.005em;font-family:var(--sans);position:relative;
+    padding-left:16px;}
+  .sg-h2::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+    width:8px;height:18px;background:var(--accent);border-radius:999px;}
+  .sg-line{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .sg-line > .field{flex:1;min-width:80px;}
+  .sg-line.toggle-row{display:grid;grid-template-columns:1fr 56px 90px;gap:10px;
+    flex-wrap:nowrap;align-items:center;}
+  .sg-line.toggle-row > .field{min-width:0;}
+  .sg-lbl{font-size:12.5px;color:var(--ink-soft);font-weight:700;
+    font-family:var(--sans);letter-spacing:.06em;text-transform:uppercase;
+    flex-shrink:0;}
+  .sg-grow{flex:1;}
+  .sg-rate{max-width:90px;}
+  .sgs .field .pre{font-family:var(--sans);font-style:normal;font-weight:700;
+    color:var(--ink-soft);font-size:14px;}
+  .sgs .field input{font-size:15px;padding:11px 14px;width:100%;
+    border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
+    border-radius:14px;-webkit-appearance:none;font-family:var(--sans);
+    transition:border-color .12s,background .12s;}
+  .sgs .field.has-pre input{padding-left:28px;}
+  .sgs .field input:focus{outline:none;border-color:var(--accent);background:#fff;}
+  .sgs .field .suf{font-size:12.5px;right:14px;color:var(--ink-soft);font-weight:700;}
+  .seg{display:flex;border:1.5px solid var(--ink-soft);background:var(--card);
+    border-radius:999px;overflow:hidden;padding:3px;gap:3px;}
+  .seg button{flex:1;border:0;background:transparent;color:var(--ink-soft);
+    font-size:13px;font-weight:700;padding:10px 8px;cursor:pointer;
+    font-family:var(--sans);letter-spacing:.02em;border-radius:999px;
+    transition:background .15s,color .15s;}
+  .seg button.on{background:var(--ink);color:var(--card);}
+  .seg button:active:not(.on){background:var(--hair);}
+  .seg.seg-lg button{font-size:14px;font-weight:700;padding:12px 8px;letter-spacing:.04em;}
   .setting label{display:block;font-size:9.5px;color:var(--muted);
     text-transform:uppercase;letter-spacing:.2em;font-weight:600;
     margin:18px 0 7px;}
@@ -282,19 +310,16 @@
 <body>
 <header>
   <h1>Price Calculator</h1>
-  <p class="tag">Promo · MBS · GST · FX</p>
-  <button class="settings-btn" id="settingsBtn" type="button" aria-label="Settings">⚙</button>
+  <button class="settings-btn" id="settingsBtn" type="button" aria-label="Settings">☰</button>
 </header>
 
 <div class="pad">
   <div class="entry">
     <label>Amount</label>
-    <div class="running" id="running"></div>
     <div class="amt-row">
       <div class="amt-wrap"><span>$</span><input id="amt" type="number" inputmode="decimal" placeholder="0" value=""></div>
-      <button id="plusBtn" title="Add to running total">+</button>
-      <button id="addBtn">Add</button>
     </div>
+    <button id="addBtn">Add</button>
     <div id="live"></div>
   </div>
 
@@ -321,35 +346,66 @@
       <button class="settings-close" id="settingsClose" type="button">Done</button>
     </div>
     <div class="setting">
-      <label>Promo — get this much off…</label>
-      <div class="field has-pre"><span class="pre">$</span><input id="promoOff" type="number" inputmode="decimal" value="6"></div>
-      <label>…for every this much spent</label>
-      <div class="field has-pre"><span class="pre">$</span><input id="promoPer" type="number" inputmode="decimal" value="100"></div>
-      <label>Promo style</label>
-      <select id="promoMode">
-        <option value="step">Step deal</option>
-        <option value="vip">VIP — 5% off</option>
-        <option value="none">No promo</option>
-      </select>
+      <div class="sgs">
+        <div class="sg-h2">Promo</div>
+        <select id="promoMode" class="sr-only">
+          <option value="step">Promo</option>
+          <option value="vip">VIP</option>
+          <option value="none">None</option>
+        </select>
+        <div class="seg seg-lg" data-for="promoMode">
+          <button type="button" data-v="step">Promo</button>
+          <button type="button" data-v="vip">VIP</button>
+          <button type="button" data-v="none">None</button>
+        </div>
+        <div class="sg-line">
+          <span class="sg-lbl">Off</span>
+          <div class="field has-pre"><span class="pre">$</span><input id="promoOff" type="number" inputmode="decimal" value="6"></div>
+          <span class="sg-lbl">Per</span>
+          <div class="field has-pre"><span class="pre">$</span><input id="promoPer" type="number" inputmode="decimal" value="100"></div>
+        </div>
+      </div>
 
-      <label>MBS rewards</label>
-      <select id="mbsOn">
-        <option value="on">Earning MBS rewards</option>
-        <option value="off">No MBS rewards</option>
-      </select>
-      <label>MBS rewards rate</label>
-      <div class="field"><input id="mbsRate" type="number" inputmode="decimal" value="3"><span class="suf">%</span></div>
-      <div class="hint">Earned on amount ÷ 1.09 × rate</div>
+      <div class="sgs">
+        <div class="sg-h2">MBS Rewards</div>
+        <select id="mbsOn" class="sr-only">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+        </select>
+        <div class="sg-line toggle-row">
+          <div class="seg seg-lg" data-for="mbsOn">
+            <button type="button" data-v="on">On</button>
+            <button type="button" data-v="off">Off</button>
+          </div>
+          <span class="sg-lbl">Rate</span>
+          <div class="field sg-rate"><input id="mbsRate" type="number" inputmode="decimal" value="3"><span class="suf">%</span></div>
+        </div>
+      </div>
 
-      <label>GST tourist refund</label>
-      <select id="refundOn">
-        <option value="on">Tax Refund</option>
-        <option value="off">No tax refund</option>
-      </select>
+      <div class="sgs">
+        <div class="sg-h2">Tax Refund</div>
+        <select id="refundOn" class="sr-only">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+        </select>
+        <div class="sg-line toggle-row">
+          <div class="seg seg-lg" data-for="refundOn">
+            <button type="button" data-v="on">On</button>
+            <button type="button" data-v="off">Off</button>
+          </div>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
 
-      <label>SGD → RMB rate (¥ per S$1)</label>
-      <div class="field has-pre"><span class="pre">¥</span><input id="fx" type="number" inputmode="decimal" value="5.3"></div>
-      <div class="pad-bottom"></div>
+      <div class="sgs">
+        <div class="sg-h2">FX Rate</div>
+        <div class="sg-line toggle-row">
+          <div class="field has-pre"><span class="pre">¥</span><input id="fx" type="number" inputmode="decimal" value="5.3"></div>
+          <span class="sg-lbl">RMB</span>
+          <span></span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -363,7 +419,6 @@ let rows=[];
 
 const STORAGE_KEY='epc-mobile-v1';
 const SETTING_IDS=['promoOff','promoPer','promoMode','mbsRate','mbsOn','refundOn','fx'];
-let runParts=[];
 let compareSet=new Set();
 const PROMO_PRESETS=[
   {mode:'step',off:6,per:100,label:'$6 off'},
@@ -379,15 +434,6 @@ function currentPromoPresetIdx(){
     return i;
   }
   return -1;
-}
-function runSum(){return runParts.reduce((a,b)=>a+b,0);}
-function currentAmount(){return runSum()+(+$('amt').value||0);}
-function updateRunning(){
-  const r=$('running');
-  if(!runParts.length){r.innerHTML='';return;}
-  const partsTxt=runParts.map(p=>'$'+p.toFixed(2)).join(' + ');
-  r.innerHTML=`Running $${runSum().toFixed(2)} <span class="parts">= ${partsTxt} +</span><button class="clr-run" id="resetRun">Reset</button>`;
-  $('resetRun').onclick=()=>{runParts=[];updateRunning();renderLive();saveState();};
 }
 
 const REFUND=[
@@ -430,11 +476,19 @@ function refundLabel(s){return s.refund==='on'?'YES':'NO';}
 function settingsNote(s){
   return 'Promo: '+promoLabel(s)+' · MBS '+mbsLabel(s)+' · GST refund '+refundLabel(s)+' · FX ¥'+s.fx+'/S$1';
 }
+function refreshSegs(){
+  document.querySelectorAll('.seg').forEach(seg=>{
+    const sel=$(seg.dataset.for);
+    if(!sel)return;
+    seg.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===sel.value));
+  });
+}
 function updateToggles(){
   const idx=currentPromoPresetIdx();
   const pmTxt=idx>=0?PROMO_PRESETS[idx].label:'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
   $('togglePromo').querySelector('.t-val').textContent=pmTxt;
   $('togglePromo').classList.toggle('off',$('promoMode').value==='none');
+  refreshSegs();
   const mo=$('mbsOn').value;
   $('toggleMbs').querySelector('.t-val').textContent=mo==='off'?'Off':(+$('mbsRate').value)+'%';
   $('toggleMbs').classList.toggle('off',mo==='off');
@@ -487,8 +541,7 @@ function saveState(){
     const blob={
       settings:Object.fromEntries(SETTING_IDS.map(id=>[id,$(id).value])),
       rows:rows,
-      amt:$('amt').value,
-      runParts:runParts
+      amt:$('amt').value
     };
     localStorage.setItem(STORAGE_KEY,JSON.stringify(blob));
   }catch(e){}
@@ -510,11 +563,10 @@ function loadState(){
     }
     if(stored&&Array.isArray(stored.rows))rows=stored.rows.filter(r=>r&&typeof r.amount==='number');
     if(stored&&typeof stored.amt==='string')$('amt').value=stored.amt;
-    if(stored&&Array.isArray(stored.runParts))runParts=stored.runParts.filter(n=>typeof n==='number'&&n>0);
   }catch(e){}
 }
 function renderLive(){
-  const v=currentAmount(), box=$('live');
+  const v=+$('amt').value||0, box=$('live');
   if(!(v>0)){box.innerHTML='';saveState();return;}
   const s=settings();
   const r=compute(v,s);
@@ -531,9 +583,7 @@ function renderLive(){
       <span>Saved <b>${money(r.saved)} · ${pc}%</b></span>
       <span>FX <span class="s">(¥${s.fx})</span></span>
     </div>
-    <button class="pin" id="pinBtn">Save to ledger</button>
   </div>`;
-  $('pinBtn').onclick=()=>{rows.push({amount:v,...settings()});runParts=[];$('amt').value='';$('amt').blur();updateRunning();renderLive();render();};
   saveState();
 }
 function render(){
@@ -574,21 +624,20 @@ function render(){
   updateToggles();
   saveState();
 }
-$('addBtn').onclick=()=>{const v=currentAmount();if(v>0){rows.push({amount:v,...settings()});runParts=[];$('amt').value='';$('amt').blur();updateRunning();renderLive();render();}};
-$('plusBtn').onclick=()=>{const v=+$('amt').value;if(v>0){runParts.push(v);$('amt').value='';updateRunning();renderLive();$('amt').focus();saveState();}};
+$('addBtn').onclick=()=>{const v=+$('amt').value;if(v>0){rows.push({amount:v,...settings()});$('amt').value='';$('amt').blur();renderLive();render();}};
 $('amt').addEventListener('input',renderLive);
 $('amt').addEventListener('keyup',renderLive);
-$('amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('addBtn').click();if(e.key==='+'){e.preventDefault();$('plusBtn').click();}});
+$('amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('addBtn').click();});
 SETTING_IDS.forEach(id=>$(id).addEventListener('input',()=>{renderLive();render();}));
 $('togglePromo').onclick=()=>{let idx=currentPromoPresetIdx();idx=idx<0?0:(idx+1)%PROMO_PRESETS.length;const p=PROMO_PRESETS[idx];$('promoMode').value=p.mode;if(p.mode==='step'){$('promoOff').value=p.off;$('promoPer').value=p.per;}updateToggles();renderLive();render();};
-$('settingsBtn').onclick=()=>{$('settingsModal').classList.remove('hidden');};
+$('settingsBtn').onclick=()=>{$('settingsModal').classList.remove('hidden');refreshSegs();};
 $('settingsClose').onclick=()=>{$('settingsModal').classList.add('hidden');};
 $('settingsBackdrop').onclick=()=>{$('settingsModal').classList.add('hidden');};
+document.querySelectorAll('.seg button').forEach(b=>{b.onclick=()=>{const seg=b.closest('.seg');const sel=$(seg.dataset.for);sel.value=b.dataset.v;sel.dispatchEvent(new Event('input',{bubbles:true}));refreshSegs();};});
 $('toggleMbs').onclick=()=>{$('mbsOn').value=$('mbsOn').value==='on'?'off':'on';updateToggles();renderLive();render();};
 $('toggleTax').onclick=()=>{$('refundOn').value=$('refundOn').value==='on'?'off':'on';updateToggles();renderLive();render();};
 $('clearBtn').onclick=()=>{rows=[];render();};
 loadState();
-updateRunning();
 updateToggles();
 renderLive();
 render();
