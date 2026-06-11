@@ -38,6 +38,12 @@
     padding:22px 22px 18px;border-bottom:1px solid var(--ink);}
   header h1{margin:0;font-family:var(--serif);font-size:30px;font-weight:600;
     letter-spacing:-.005em;line-height:1;color:var(--ink);}
+  .settings-btn{position:absolute;top:16px;right:16px;
+    border:1px solid var(--ink);background:var(--card);color:var(--ink);
+    font-size:18px;line-height:1;letter-spacing:0;
+    width:36px;height:36px;padding:0;cursor:pointer;font-family:var(--sans);
+    display:flex;align-items:center;justify-content:center;}
+  .settings-btn:active{background:var(--ink);color:var(--card);}
   header .tag{margin:10px 0 0;font-size:9.5px;color:var(--muted);
     text-transform:uppercase;letter-spacing:.28em;font-weight:600;
     display:flex;align-items:center;gap:10px;}
@@ -115,8 +121,74 @@
     text-transform:none;letter-spacing:0;font-size:13px;color:var(--ink-soft);
     margin-left:4px;}
 
+  /* ─── quick toggle buttons ─── */
+  .toggles{display:flex;gap:8px;margin:28px 0 0;}
+  .toggles button{flex:1;border:1px solid var(--line);background:var(--card);
+    padding:10px 6px 9px;cursor:pointer;font-family:var(--sans);
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+    transition:border-color .15s,background .15s;}
+  .toggles button:active{background:var(--paper);}
+  .toggles button .t-lbl{font-size:9px;color:var(--muted);font-weight:700;
+    text-transform:uppercase;letter-spacing:.22em;}
+  .toggles button .t-val{font-size:12.5px;color:var(--ink);font-weight:700;
+    letter-spacing:.02em;font-variant-numeric:tabular-nums;}
+  .toggles button.off{background:var(--paper);}
+  .toggles button.off .t-val{color:var(--muted);}
+  .toggles button.on{border-color:var(--ink);}
+
+  /* ─── compare panel ─── */
+  .compare-panel{background:var(--card);border:1px solid var(--ink);margin-bottom:14px;
+    padding:12px 14px 14px;}
+  .compare-panel:empty{display:none;}
+  .compare-panel .cmp-head{display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:10px;font-size:9.5px;color:var(--accent);text-transform:uppercase;
+    letter-spacing:.22em;font-weight:700;}
+  .compare-panel .cmp-close{border:0;background:none;color:var(--muted);
+    font-size:9.5px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    cursor:pointer;padding:2px 0;font-family:var(--sans);}
+  .cmp-grid{display:grid;gap:0;font-size:11.5px;}
+  .cmp-row{display:grid;grid-template-columns:64px repeat(var(--cols,2),1fr);
+    border-bottom:1px dotted var(--hair);padding:6px 0;align-items:baseline;gap:6px;}
+  .cmp-row:last-child{border-bottom:0;}
+  .cmp-row.head{padding-bottom:8px;border-bottom:1px solid var(--line);}
+  .cmp-row.head .val{font-size:10px;color:var(--ink);text-transform:uppercase;
+    letter-spacing:.16em;font-weight:700;font-family:var(--sans);}
+  .cmp-row.final{background:var(--good-bg);border-bottom:0;margin:6px -6px 0;
+    padding:8px 6px;border-radius:0;}
+  .cmp-row.final .k{color:var(--ink);font-weight:700;font-size:9.5px;
+    text-transform:uppercase;letter-spacing:.2em;padding-left:6px;}
+  .cmp-row.final .val{color:var(--ink);font-weight:700;font-size:14px;}
+  .cmp-grid .k{color:var(--muted);font-weight:600;font-size:10px;
+    text-transform:uppercase;letter-spacing:.14em;font-family:var(--sans);}
+  .cmp-grid .val{font-variant-numeric:tabular-nums;font-weight:600;
+    color:var(--accent);text-align:right;font-family:var(--sans);font-size:12.5px;
+    letter-spacing:-.01em;}
+  .cmp-row .val.neutral{color:var(--ink);}
+  .cmp-totals{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);}
+  .cmp-tot-head{font-size:9.5px;color:var(--ink);text-transform:uppercase;
+    letter-spacing:.22em;font-weight:700;margin-bottom:6px;}
+  .cmp-trow{display:flex;justify-content:space-between;align-items:baseline;
+    padding:6px 0;border-bottom:1px dotted var(--hair);font-size:12.5px;gap:10px;}
+  .cmp-trow:last-child{border-bottom:0;}
+  .cmp-trow .k{color:var(--ink-soft);font-weight:600;}
+  .cmp-trow .k em{font-style:italic;font-family:var(--serif);color:var(--muted);
+    font-weight:400;font-size:11px;margin-left:3px;}
+  .cmp-trow .v{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent);
+    letter-spacing:-.01em;white-space:nowrap;}
+  .cmp-trow.final{background:var(--good-bg);margin:8px -8px 0;padding:10px 12px;
+    border-bottom:0;}
+  .cmp-trow.final .k{font-size:10px;text-transform:uppercase;letter-spacing:.22em;
+    color:var(--ink);font-weight:700;}
+  .cmp-trow.final .v{font-size:17px;color:var(--ink);}
+  .cmp-trow.final .v em{font-style:normal;font-family:var(--sans);font-size:13px;
+    font-weight:700;color:var(--accent);margin-left:4px;}
+
   /* ─── saved cards ─── */
-  .rcard{background:var(--card);border:1px solid var(--line);margin-bottom:14px;}
+  .rcard{background:var(--card);border:1px solid var(--line);margin-bottom:14px;
+    position:relative;cursor:pointer;transition:border-color .15s;}
+  .rcard.compare-on{border-color:var(--ink);}
+  .rcard.compare-on::before{content:'';position:absolute;left:-1px;top:-1px;bottom:-1px;
+    width:3px;background:var(--ink);}
   .rcard-head{display:flex;justify-content:space-between;align-items:center;
     padding:10px 16px;border-bottom:1px solid var(--hair);}
   .rcard-head .num{font-family:var(--serif);font-size:14px;font-style:italic;
@@ -146,6 +218,8 @@
   .brow .k{color:var(--ink-soft);font-weight:500;flex:1;min-width:0;}
   .brow .val{font-variant-numeric:tabular-nums;font-weight:600;color:var(--accent);
     font-family:var(--sans);font-size:13px;white-space:nowrap;letter-spacing:-.01em;}
+  .brow.subt .val{color:var(--ink);font-weight:700;}
+  .brow.subt .k{color:var(--ink);font-weight:600;}
   .brow .k .s{font-size:11.5px;font-weight:600;margin-left:6px;
     font-family:var(--sans);color:var(--ink-soft);font-style:normal;
     letter-spacing:.01em;font-variant-numeric:tabular-nums;}
@@ -167,17 +241,22 @@
   .empty{text-align:center;color:var(--muted);font-size:14px;padding:46px 10px;
     font-style:italic;font-family:var(--serif);}
 
-  /* ─── settings ─── */
-  details{background:var(--card);border:1px solid var(--line);margin-top:18px;}
-  summary{list-style:none;padding:16px 18px;font-size:10px;font-weight:700;
-    text-transform:uppercase;letter-spacing:.26em;color:var(--ink);
-    display:flex;justify-content:space-between;align-items:center;cursor:pointer;
-    font-family:var(--sans);}
-  summary::-webkit-details-marker{display:none;}
-  summary .arr{color:var(--muted);font-size:16px;font-weight:400;transition:transform .2s;
-    font-family:var(--serif);letter-spacing:0;}
-  details[open] summary .arr{transform:rotate(180deg);}
-  details[open] summary{border-bottom:1px solid var(--hair);}
+  /* ─── settings modal ─── */
+  .settings-modal{position:fixed;inset:0;z-index:50;display:flex;
+    align-items:flex-start;justify-content:center;padding:40px 16px;}
+  .settings-modal.hidden{display:none;}
+  .settings-backdrop{position:absolute;inset:0;background:rgba(21,23,26,.45);}
+  .settings-sheet{position:relative;background:var(--card);width:100%;max-width:480px;
+    max-height:calc(100vh - 80px);overflow-y:auto;border:1px solid var(--ink);
+    -webkit-overflow-scrolling:touch;}
+  .settings-head{display:flex;justify-content:space-between;align-items:center;
+    padding:16px 18px;border-bottom:1px solid var(--ink);position:sticky;top:0;
+    background:var(--card);z-index:1;}
+  .settings-head .ttl{font-size:11px;text-transform:uppercase;letter-spacing:.24em;
+    font-weight:700;color:var(--ink);}
+  .settings-close{border:0;background:none;color:var(--accent);
+    font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.22em;
+    cursor:pointer;padding:4px;font-family:var(--sans);}
   .setting{padding:8px 18px 22px;}
   .setting label{display:block;font-size:9.5px;color:var(--muted);
     text-transform:uppercase;letter-spacing:.2em;font-weight:600;
@@ -204,6 +283,7 @@
 <header>
   <h1>Price Calculator</h1>
   <p class="tag">Promo · MBS · GST · FX</p>
+  <button class="settings-btn" id="settingsBtn" type="button" aria-label="Settings">⚙</button>
 </header>
 
 <div class="pad">
@@ -218,14 +298,28 @@
     <div id="live"></div>
   </div>
 
+  <div class="toggles">
+    <button id="togglePromo" type="button"><span class="t-lbl">Promo</span><span class="t-val">Step</span></button>
+    <button id="toggleMbs" type="button"><span class="t-lbl">MBS</span><span class="t-val">On</span></button>
+    <button id="toggleTax" type="button"><span class="t-lbl">Tax</span><span class="t-val">On</span></button>
+  </div>
+
   <div class="section-label">
     <span class="ttl">Ledger <em>— saved entries</em></span>
     <button id="clearBtn" class="hidden">Clear</button>
   </div>
+  <div class="compare-panel" id="comparePanel"></div>
   <div id="list"><div class="empty">Saved entries will appear here.</div></div>
 
-  <details>
-    <summary>Settings &amp; Rates <span class="arr">▾</span></summary>
+</div>
+
+<div class="settings-modal hidden" id="settingsModal">
+  <div class="settings-backdrop" id="settingsBackdrop"></div>
+  <div class="settings-sheet">
+    <div class="settings-head">
+      <span class="ttl">Settings &amp; Rates</span>
+      <button class="settings-close" id="settingsClose" type="button">Done</button>
+    </div>
     <div class="setting">
       <label>Promo — get this much off…</label>
       <div class="field has-pre"><span class="pre">$</span><input id="promoOff" type="number" inputmode="decimal" value="6"></div>
@@ -233,11 +327,16 @@
       <div class="field has-pre"><span class="pre">$</span><input id="promoPer" type="number" inputmode="decimal" value="100"></div>
       <label>Promo style</label>
       <select id="promoMode">
-        <option value="step">Per full increment ($6 at $100, $12 at $200)</option>
-        <option value="vip">VIP — 5% off original price</option>
+        <option value="step">Step deal</option>
+        <option value="vip">VIP — 5% off</option>
         <option value="none">No promo</option>
       </select>
 
+      <label>MBS rewards</label>
+      <select id="mbsOn">
+        <option value="on">Earning MBS rewards</option>
+        <option value="off">No MBS rewards</option>
+      </select>
       <label>MBS rewards rate</label>
       <div class="field"><input id="mbsRate" type="number" inputmode="decimal" value="3"><span class="suf">%</span></div>
       <div class="hint">Earned on amount ÷ 1.09 × rate</div>
@@ -248,17 +347,11 @@
         <option value="off">No tax refund</option>
       </select>
 
-      <label>Rewards &amp; refund based on</label>
-      <select id="baseOn">
-        <option value="after">Amount after promo discount</option>
-        <option value="before">Original amount</option>
-      </select>
-
       <label>SGD → RMB rate (¥ per S$1)</label>
       <div class="field has-pre"><span class="pre">¥</span><input id="fx" type="number" inputmode="decimal" value="5.3"></div>
       <div class="pad-bottom"></div>
     </div>
-  </details>
+  </div>
 </div>
 
 
@@ -269,8 +362,24 @@ const yuan=n=>(n<0?'-¥':'¥')+Math.abs(n).toFixed(2);
 let rows=[];
 
 const STORAGE_KEY='epc-mobile-v1';
-const SETTING_IDS=['promoOff','promoPer','promoMode','mbsRate','refundOn','baseOn','fx'];
+const SETTING_IDS=['promoOff','promoPer','promoMode','mbsRate','mbsOn','refundOn','fx'];
 let runParts=[];
+let compareSet=new Set();
+const PROMO_PRESETS=[
+  {mode:'step',off:6,per:100,label:'$6 off'},
+  {mode:'vip',label:'VIP 5%'},
+  {mode:'none',label:'None'}
+];
+function currentPromoPresetIdx(){
+  const m=$('promoMode').value,o=+$('promoOff').value,p=+$('promoPer').value;
+  for(let i=0;i<PROMO_PRESETS.length;i++){
+    const pr=PROMO_PRESETS[i];
+    if(pr.mode!==m)continue;
+    if(pr.mode==='step'&&(pr.off!==o||pr.per!==p))continue;
+    return i;
+  }
+  return -1;
+}
 function runSum(){return runParts.reduce((a,b)=>a+b,0);}
 function currentAmount(){return runSum()+(+$('amt').value||0);}
 function updateRunning(){
@@ -299,12 +408,15 @@ function gstRefund(a){
 }
 function settings(){return{
   off:+$('promoOff').value,per:+$('promoPer').value,pmode:$('promoMode').value,
-  mbs:+$('mbsRate').value/100,refund:$('refundOn').value,base:$('baseOn').value,fx:+$('fx').value
+  mbs:+$('mbsRate').value/100,mbsOn:$('mbsOn').value,
+  refund:$('refundOn').value,fx:+$('fx').value
 };}
 function promoDisc(a,s){if(s.pmode==='none')return 0;if(s.pmode==='vip')return a*0.05;if(s.per<=0||s.off<=0)return 0;return Math.floor(a/s.per)*s.off;}
 function compute(a,s){
-  const disc=promoDisc(a,s),after=a-disc,base=s.base==='after'?after:a;
-  const mbs=base/1.09*s.mbs,refund=s.refund==='on'?gstRefund(base):0;
+  const disc=promoDisc(a,s),after=a-disc;
+  const mbsActive=s.mbsOn!=='off';
+  const mbs=mbsActive?after/1.09*s.mbs:0;
+  const refund=s.refund==='on'?gstRefund(after):0;
   const net=after-mbs-refund,saved=a-net,netRmb=net*s.fx;
   return{a,disc,after,mbs,refund,net,saved,netRmb};
 }
@@ -313,10 +425,62 @@ function promoLabel(s){
   if(s.pmode==='vip')return 'VIP 5%';
   return '$'+s.off+' off per $'+s.per;
 }
-function mbsLabel(s){return (s.mbs*100).toFixed(1).replace(/\.0$/,'')+'%';}
+function mbsLabel(s){if(s.mbsOn==='off')return 'Off';return (s.mbs*100).toFixed(1).replace(/\.0$/,'')+'%';}
 function refundLabel(s){return s.refund==='on'?'YES':'NO';}
 function settingsNote(s){
   return 'Promo: '+promoLabel(s)+' · MBS '+mbsLabel(s)+' · GST refund '+refundLabel(s)+' · FX ¥'+s.fx+'/S$1';
+}
+function updateToggles(){
+  const idx=currentPromoPresetIdx();
+  const pmTxt=idx>=0?PROMO_PRESETS[idx].label:'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
+  $('togglePromo').querySelector('.t-val').textContent=pmTxt;
+  $('togglePromo').classList.toggle('off',$('promoMode').value==='none');
+  const mo=$('mbsOn').value;
+  $('toggleMbs').querySelector('.t-val').textContent=mo==='off'?'Off':(+$('mbsRate').value)+'%';
+  $('toggleMbs').classList.toggle('off',mo==='off');
+  const ro=$('refundOn').value;
+  $('toggleTax').querySelector('.t-val').textContent=ro==='off'?'Off':'On';
+  $('toggleTax').classList.toggle('off',ro==='off');
+}
+function renderCompare(){
+  const panel=$('comparePanel');
+  const cmpRows=[...compareSet].filter(r=>rows.includes(r));
+  if(cmpRows.length<2){panel.innerHTML='';return;}
+  const items=cmpRows.map(row=>({row,idx:rows.indexOf(row)})).sort((a,b)=>a.idx-b.idx);
+  const computed=items.map(({row,idx})=>({row,idx,c:compute(row.amount,row)}));
+  const cols=computed.length;
+  let tA=0,tAfter=0,tDisc=0,tMbs=0,tRefundBase=0;
+  computed.forEach(({row,c})=>{
+    tA+=c.a;tAfter+=c.after;tDisc+=c.disc;tMbs+=c.mbs;
+    if(row.refund==='on')tRefundBase+=c.after;
+  });
+  const tRefund=gstRefund(tRefundBase);
+  const tNet=tAfter-tMbs-tRefund;
+  const tSaved=tA-tNet;
+  const tRmb=tNet*(+$('fx').value);
+  let h=`<div class="cmp-head"><span>Compare · ${cols} entries</span><button class="cmp-close" id="cmpCloseBtn">Close</button></div>`;
+  h+=`<div class="cmp-grid" style="--cols:${cols}">`;
+  h+=`<div class="cmp-row head"><span class="k"></span>${computed.map(({idx})=>`<span class="val">No. ${String(idx+1).padStart(2,'0')}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">Original</span>${computed.map(({c})=>`<span class="val neutral">${money(c.a)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">After</span>${computed.map(({c})=>`<span class="val neutral">${money(c.after)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">Promo</span>${computed.map(({c})=>`<span class="val">${c.disc>0?'−'+money(c.disc):'—'}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">MBS</span>${computed.map(({c})=>`<span class="val">${c.mbs>0?'−'+money(c.mbs):'—'}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">Tax</span>${computed.map(({c})=>`<span class="val">${c.refund>0?'−'+money(c.refund):'—'}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">Saved</span>${computed.map(({c})=>`<span class="val">${money(c.saved)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row final"><span class="k">Final</span>${computed.map(({c})=>`<span class="val">${money(c.net)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">¥</span>${computed.map(({c})=>`<span class="val">${yuan(c.netRmb)}</span>`).join('')}</div>`;
+  h+=`</div>`;
+  h+=`<div class="cmp-totals">`;
+  h+=`<div class="cmp-tot-head">Total of ${cols} selected</div>`;
+  h+=`<div class="cmp-trow"><span class="k">After discount</span><span class="v">${money(tAfter)}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">Promo discount</span><span class="v">${tDisc>0?'−'+money(tDisc):'—'}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">MBS rewards</span><span class="v">${tMbs>0?'−'+money(tMbs):'—'}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">Tax refund <em>(combined)</em></span><span class="v">${tRefund>0?'−'+money(tRefund):'—'}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">Total saved</span><span class="v">${money(tSaved)}</span></div>`;
+  h+=`<div class="cmp-trow final"><span class="k">Final</span><span class="v">${money(tNet)} <em>· ${yuan(tRmb)}</em></span></div>`;
+  h+=`</div>`;
+  panel.innerHTML=h;
+  $('cmpCloseBtn').onclick=()=>{compareSet.clear();render();};
 }
 function saveState(){
   try{
@@ -374,13 +538,13 @@ function renderLive(){
 }
 function render(){
   const L=$('list');
-  if(!rows.length){L.innerHTML='<div class="empty">Saved entries will appear here.</div>';$('clearBtn').classList.add('hidden');saveState();return;}
+  if(!rows.length){compareSet.clear();L.innerHTML='<div class="empty">Saved entries will appear here.</div>';$('clearBtn').classList.add('hidden');renderCompare();updateToggles();saveState();return;}
   let h='';
   for(let i=rows.length-1;i>=0;i--){
     const row=rows[i];
     const r=compute(row.amount,row);
     const pc=r.a>0?(r.saved/r.a*100).toFixed(1):'0';
-    h+=`<div class="rcard">
+    h+=`<div class="rcard${compareSet.has(row)?' compare-on':''}" data-i="${i}">
       <div class="rcard-head">
         <span class="num"><b>No.</b>${String(i+1).padStart(2,'0')}</span>
         <button class="del" data-i="${i}">Remove</button>
@@ -390,7 +554,8 @@ function render(){
         <div class="saved-box"><span class="lbl">Total saved</span><div class="v">${money(r.saved)} <span class="pc">${pc}%</span></div></div>
       </div>
       <div class="breakdown">
-        ${r.disc>0?`<div class="brow"><span class="k">Promo discount <span class="s">(${promoLabel(row)})</span></span><span class="val">−${money(r.disc)}</span></div>`:''}
+        ${r.disc>0?`<div class="brow subt"><span class="k">After discount</span><span class="val">${money(r.after)}</span></div>
+        <div class="brow"><span class="k">Promo discount <span class="s">(${promoLabel(row)})</span></span><span class="val">−${money(r.disc)}</span></div>`:''}
         <div class="brow"><span class="k">MBS rewards <span class="s">(${mbsLabel(row)})</span></span><span class="val">−${money(r.mbs)}</span></div>
         <div class="brow"><span class="k">GST refund <span class="s">(${refundLabel(row)})</span></span><span class="val">−${money(r.refund)}</span></div>
       </div>
@@ -402,8 +567,11 @@ function render(){
     </div>`;
   }
   L.innerHTML=h;
-  L.querySelectorAll('.del').forEach(b=>b.onclick=()=>{rows.splice(+b.dataset.i,1);render();});
+  L.querySelectorAll('.rcard').forEach(card=>{card.onclick=()=>{const row=rows[+card.dataset.i];if(compareSet.has(row))compareSet.delete(row);else compareSet.add(row);render();};});
+  L.querySelectorAll('.del').forEach(b=>b.onclick=(e)=>{e.stopPropagation();const i=+b.dataset.i;compareSet.delete(rows[i]);rows.splice(i,1);render();});
   $('clearBtn').classList.remove('hidden');
+  renderCompare();
+  updateToggles();
   saveState();
 }
 $('addBtn').onclick=()=>{const v=currentAmount();if(v>0){rows.push({amount:v,...settings()});runParts=[];$('amt').value='';$('amt').blur();updateRunning();renderLive();render();}};
@@ -412,9 +580,16 @@ $('amt').addEventListener('input',renderLive);
 $('amt').addEventListener('keyup',renderLive);
 $('amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('addBtn').click();if(e.key==='+'){e.preventDefault();$('plusBtn').click();}});
 SETTING_IDS.forEach(id=>$(id).addEventListener('input',()=>{renderLive();render();}));
+$('togglePromo').onclick=()=>{let idx=currentPromoPresetIdx();idx=idx<0?0:(idx+1)%PROMO_PRESETS.length;const p=PROMO_PRESETS[idx];$('promoMode').value=p.mode;if(p.mode==='step'){$('promoOff').value=p.off;$('promoPer').value=p.per;}updateToggles();renderLive();render();};
+$('settingsBtn').onclick=()=>{$('settingsModal').classList.remove('hidden');};
+$('settingsClose').onclick=()=>{$('settingsModal').classList.add('hidden');};
+$('settingsBackdrop').onclick=()=>{$('settingsModal').classList.add('hidden');};
+$('toggleMbs').onclick=()=>{$('mbsOn').value=$('mbsOn').value==='on'?'off':'on';updateToggles();renderLive();render();};
+$('toggleTax').onclick=()=>{$('refundOn').value=$('refundOn').value==='on'?'off':'on';updateToggles();renderLive();render();};
 $('clearBtn').onclick=()=>{rows=[];render();};
 loadState();
 updateRunning();
+updateToggles();
 renderLive();
 render();
 </script>
