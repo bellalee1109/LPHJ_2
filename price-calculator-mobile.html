@@ -57,8 +57,9 @@
   .entry > label{display:block;font-size:9.5px;color:var(--ink-soft);
     text-transform:uppercase;letter-spacing:.22em;font-weight:700;
     margin-bottom:12px;}
-  .amt-row{display:flex;background:var(--card);border-radius:999px;overflow:hidden;
-    margin-bottom:12px;}
+  .amt-bar{display:flex;gap:10px;align-items:stretch;}
+  .amt-bar > .amt-row{flex:1;min-width:0;}
+  .amt-row{display:flex;background:var(--card);border-radius:999px;overflow:hidden;}
   .amt-wrap{position:relative;flex:1;}
   .amt-wrap span{position:absolute;left:20px;top:50%;transform:translateY(-50%);
     color:var(--ink-soft);font-size:20px;font-weight:700;font-family:var(--sans);}
@@ -67,9 +68,10 @@
     -webkit-appearance:none;letter-spacing:-.01em;font-variant-numeric:tabular-nums;
     text-align:left;}
   #amt:focus{outline:none;}
-  #addBtn{display:block;width:100%;border:0;background:var(--accent);color:#fff;
-    font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.28em;
-    padding:16px;cursor:pointer;font-family:var(--sans);border-radius:999px;}
+  #addBtn{border:0;background:var(--accent);color:#fff;
+    font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.24em;
+    padding:0 28px;cursor:pointer;font-family:var(--sans);border-radius:999px;
+    flex-shrink:0;}
   #addBtn:active{background:var(--ink);}
   /* ─── live preview ─── */
   #live{margin-top:18px;}
@@ -276,6 +278,9 @@
     transition:border-color .12s,background .12s;}
   .sgs .field.has-pre input{padding-left:28px;}
   .sgs .field input:focus{outline:none;border-color:var(--accent);background:#fff;}
+  .sgs .field input:disabled{background:transparent;color:var(--muted);cursor:not-allowed;border-style:dashed;}
+  .sg-line.dim{opacity:.45;}
+  .sg-line.dim .sg-lbl,.sg-line.dim .pre,.sg-line.dim .suf{color:var(--muted);}
   .sgs .field .suf{font-size:12.5px;right:14px;color:var(--ink-soft);font-weight:700;}
   .seg{display:flex;border:1.5px solid var(--ink-soft);background:var(--card);
     border-radius:999px;overflow:hidden;padding:3px;gap:3px;}
@@ -316,10 +321,12 @@
 <div class="pad">
   <div class="entry">
     <label>Amount</label>
-    <div class="amt-row">
-      <div class="amt-wrap"><span>$</span><input id="amt" type="number" inputmode="decimal" placeholder="0" value=""></div>
+    <div class="amt-bar">
+      <div class="amt-row">
+        <div class="amt-wrap"><span>$</span><input id="amt" type="number" inputmode="decimal" placeholder="0" value=""></div>
+      </div>
+      <button id="addBtn">Add</button>
     </div>
-    <button id="addBtn">Add</button>
     <div id="live"></div>
   </div>
 
@@ -350,19 +357,27 @@
         <div class="sg-h2">Promo</div>
         <select id="promoMode" class="sr-only">
           <option value="step">Promo</option>
+          <option value="pct10">10% off</option>
+          <option value="pct15">10% + VIP 5%</option>
           <option value="vip">VIP</option>
           <option value="none">None</option>
         </select>
         <div class="seg seg-lg" data-for="promoMode">
           <button type="button" data-v="step">Promo</button>
+          <button type="button" data-v="pct10">10%</button>
+          <button type="button" data-v="pct15">10+5</button>
           <button type="button" data-v="vip">VIP</button>
           <button type="button" data-v="none">None</button>
         </div>
-        <div class="sg-line">
+        <div class="sg-line promo-step">
           <span class="sg-lbl">Off</span>
           <div class="field has-pre"><span class="pre">$</span><input id="promoOff" type="number" inputmode="decimal" value="6"></div>
           <span class="sg-lbl">Per</span>
           <div class="field has-pre"><span class="pre">$</span><input id="promoPer" type="number" inputmode="decimal" value="100"></div>
+        </div>
+        <div class="sg-line promo-pct">
+          <span class="sg-lbl">%</span>
+          <div class="field sg-rate"><input id="promoPct" type="number" inputmode="decimal" value="10"><span class="suf">%</span></div>
         </div>
       </div>
 
@@ -418,10 +433,12 @@ const yuan=n=>(n<0?'-¥':'¥')+Math.abs(n).toFixed(2);
 let rows=[];
 
 const STORAGE_KEY='epc-mobile-v1';
-const SETTING_IDS=['promoOff','promoPer','promoMode','mbsRate','mbsOn','refundOn','fx'];
+const SETTING_IDS=['promoOff','promoPer','promoPct','promoMode','mbsRate','mbsOn','refundOn','fx'];
 let compareSet=new Set();
 const PROMO_PRESETS=[
   {mode:'step',off:6,per:100,label:'$6 off'},
+  {mode:'pct10',label:'10% off'},
+  {mode:'pct15',label:'10% + VIP 5%'},
   {mode:'vip',label:'VIP 5%'},
   {mode:'none',label:'None'}
 ];
@@ -453,11 +470,11 @@ function gstRefund(a){
   let r=0;for(const[lb,v]of REFUND){if(a>=lb)r=v;else break;}return r;
 }
 function settings(){return{
-  off:+$('promoOff').value,per:+$('promoPer').value,pmode:$('promoMode').value,
+  off:+$('promoOff').value,per:+$('promoPer').value,pct:+$('promoPct').value,pmode:$('promoMode').value,
   mbs:+$('mbsRate').value/100,mbsOn:$('mbsOn').value,
   refund:$('refundOn').value,fx:+$('fx').value
 };}
-function promoDisc(a,s){if(s.pmode==='none')return 0;if(s.pmode==='vip')return a*0.05;if(s.per<=0||s.off<=0)return 0;return Math.floor(a/s.per)*s.off;}
+function promoDisc(a,s){if(s.pmode==='none')return 0;if(s.pmode==='vip')return a*0.05;const p=(s.pct||10)/100;if(s.pmode==='pct10')return a*p;if(s.pmode==='pct15')return a*(0.05+0.95*p);if(s.per<=0||s.off<=0)return 0;return Math.floor(a/s.per)*s.off;}
 function compute(a,s){
   const disc=promoDisc(a,s),after=a-disc;
   const mbsActive=s.mbsOn!=='off';
@@ -469,6 +486,9 @@ function compute(a,s){
 function promoLabel(s){
   if(s.pmode==='none')return 'none';
   if(s.pmode==='vip')return 'VIP 5%';
+  const p=s.pct||10;
+  if(s.pmode==='pct10')return p+'% off';
+  if(s.pmode==='pct15')return p+'% + VIP 5%';
   return '$'+s.off+' off per $'+s.per;
 }
 function mbsLabel(s){if(s.mbsOn==='off')return 'Off';return (s.mbs*100).toFixed(1).replace(/\.0$/,'')+'%';}
@@ -484,10 +504,23 @@ function refreshSegs(){
   });
 }
 function updateToggles(){
-  const idx=currentPromoPresetIdx();
-  const pmTxt=idx>=0?PROMO_PRESETS[idx].label:'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
+  const pm=$('promoMode').value;
+  let pmTxt;
+  if(pm==='step'){
+    const idx=currentPromoPresetIdx();
+    pmTxt=idx>=0?PROMO_PRESETS[idx].label:'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
+  }else{
+    pmTxt=promoLabel(settings());
+  }
   $('togglePromo').querySelector('.t-val').textContent=pmTxt;
-  $('togglePromo').classList.toggle('off',$('promoMode').value==='none');
+  $('togglePromo').classList.toggle('off',pm==='none');
+  const stepActive=pm==='step';
+  const pctActive=pm==='pct10'||pm==='pct15';
+  $('promoOff').disabled=!stepActive;
+  $('promoPer').disabled=!stepActive;
+  $('promoPct').disabled=!pctActive;
+  document.querySelector('.promo-step')&&document.querySelector('.promo-step').classList.toggle('dim',!stepActive);
+  document.querySelector('.promo-pct')&&document.querySelector('.promo-pct').classList.toggle('dim',!pctActive);
   refreshSegs();
   const mo=$('mbsOn').value;
   $('toggleMbs').querySelector('.t-val').textContent=mo==='off'?'Off':(+$('mbsRate').value)+'%';
