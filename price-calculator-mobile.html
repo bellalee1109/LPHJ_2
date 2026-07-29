@@ -126,19 +126,6 @@
   .toggles button.off .t-val{color:var(--muted);}
   .toggles button.off .t-lbl{color:var(--muted);}
 
-  /* ─── close (disable) old promo ─── */
-  .promo-close{display:inline-flex;align-items:center;gap:8px;margin:12px 4px 0;
-    cursor:pointer;-webkit-user-select:none;user-select:none;}
-  .promo-close .pc-box{width:17px;height:17px;border:1.5px solid var(--ink-soft);
-    border-radius:5px;background:var(--card);position:relative;flex-shrink:0;
-    transition:background .15s,border-color .15s;}
-  .promo-close.on .pc-box{background:var(--accent);border-color:var(--accent);}
-  .promo-close.on .pc-box::after{content:'';position:absolute;left:5px;top:1px;
-    width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
-  .promo-close .pc-txt{font-size:10px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.2em;color:var(--ink-soft);}
-  .promo-close.on .pc-txt{color:var(--accent);}
-
   /* ─── limited-time (Aug) promo bar ─── */
   .lto-bar{margin:28px 0 0;}
   .lto-bar.hidden{display:none;}
@@ -376,18 +363,11 @@
     <button id="toggleMbs" type="button"><span class="t-lbl">MBS</span><span class="t-val">On</span></button>
     <button id="toggleTax" type="button"><span class="t-lbl">Tax</span><span class="t-val">On</span></button>
   </div>
-  <div class="promo-close" id="promoCloseCtl" role="checkbox" aria-checked="false" tabindex="0">
-    <span class="pc-box"></span><span class="pc-txt">Close</span>
-  </div>
   <select id="ltoMode" class="sr-only" aria-hidden="true">
     <option value="off">Off</option>
     <option value="step">$10 off</option>
     <option value="step5">$10 +5%</option>
     <option value="step5vip">$10 +5%+VIP</option>
-  </select>
-  <select id="promoLock" class="sr-only" aria-hidden="true">
-    <option value="off">Unlocked</option>
-    <option value="on">Locked</option>
   </select>
 
   <div class="section-label">
@@ -487,7 +467,7 @@ const yuan=n=>(n<0?'-¥':'¥')+Math.abs(n).toFixed(2);
 let rows=[];
 
 const STORAGE_KEY='epc-mobile-v1';
-const SETTING_IDS=['promoOff','promoPer','promoPct','promoMode','ltoMode','promoLock','mbsRate','mbsOn','refundOn','fx'];
+const SETTING_IDS=['promoOff','promoPer','promoPct','promoMode','ltoMode','mbsRate','mbsOn','refundOn','fx'];
 let compareSet=new Set();
 const PROMO_PRESETS=[
   {mode:'step',off:6,per:100,label:'$6 off'},
@@ -513,11 +493,9 @@ function applyLtoVisibility(){
   if(bar)bar.classList.toggle('hidden',!on);
   if(!on&&$('ltoMode')&&$('ltoMode').value!=='off')$('ltoMode').value='off';
 }
-// Only one promo applies: the Aug promo wins when on; otherwise the old promo
-// (unless it's been "closed" to None).
+// Only one promo applies: the Aug promo wins when on; otherwise the old promo.
 function effPromo(s){
   if(s.lto&&s.lto!=='off')return {pmode:s.lto,off:10,per:100,pct:5};
-  if(s.lock)return {pmode:'none'};
   return {pmode:s.pmode,off:s.off,per:s.per,pct:s.pct};
 }
 function currentPromoPresetIdx(){
@@ -549,7 +527,7 @@ function gstRefund(a){
 }
 function settings(){return{
   off:+$('promoOff').value,per:+$('promoPer').value,pct:+$('promoPct').value,pmode:$('promoMode').value,
-  lto:$('ltoMode').value,lock:$('promoLock').value==='on',
+  lto:$('ltoMode').value,
   mbs:+$('mbsRate').value/100,mbsOn:$('mbsOn').value,
   refund:$('refundOn').value,fx:+$('fx').value
 };}
@@ -590,13 +568,10 @@ function refreshSegs(){
 function updateToggles(){
   applyLtoVisibility();
   const pm=$('promoMode').value;
-  const locked=$('promoLock').value==='on';
   const ltoOn=$('ltoMode').value!=='off';
   // Old Promo toggle shows the OLD promo label only (never the Aug one)
   let pmTxt;
-  if(locked){
-    pmTxt='None';
-  }else if(pm==='step'){
+  if(pm==='step'){
     const idx=currentPromoPresetIdx();
     pmTxt=idx>=0?PROMO_PRESETS[idx].label:'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
   }else{
@@ -604,16 +579,14 @@ function updateToggles(){
     pmTxt=l==='none'?'None':l;
   }
   $('togglePromo').querySelector('.t-val').textContent=pmTxt;
-  // Grey the old Promo toggle when it has no effect (closed, or overridden by Aug promo)
-  $('togglePromo').classList.toggle('off',locked||ltoOn||pm==='none');
-  const cc=$('promoCloseCtl');
-  if(cc){cc.classList.toggle('on',locked);cc.setAttribute('aria-checked',locked?'true':'false');}
+  // Grey the old Promo toggle when it has no effect (overridden by the Aug promo)
+  $('togglePromo').classList.toggle('off',ltoOn||pm==='none');
   // Aug promo toggle
   const lt=LTO_PRESETS.find(p=>p.mode===$('ltoMode').value)||LTO_PRESETS[0];
   const ltEl=$('toggleLto');
   if(ltEl){ltEl.querySelector('.t-val').textContent=lt.label;ltEl.classList.toggle('off',!ltoOn);}
-  const stepActive=pm==='step'&&!locked;
-  const pctActive=(pm==='pct10'||pm==='pct15')&&!locked;
+  const stepActive=pm==='step';
+  const pctActive=pm==='pct10'||pm==='pct15';
   $('promoOff').disabled=!stepActive;
   $('promoPer').disabled=!stepActive;
   $('promoPct').disabled=!pctActive;
@@ -760,11 +733,8 @@ $('amt').addEventListener('input',renderLive);
 $('amt').addEventListener('keyup',renderLive);
 $('amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('addBtn').click();});
 SETTING_IDS.forEach(id=>$(id).addEventListener('input',()=>{renderLive();render();}));
-$('togglePromo').onclick=()=>{if($('promoLock').value==='on')return;let idx=currentPromoPresetIdx();idx=idx<0?0:(idx+1)%PROMO_PRESETS.length;const p=PROMO_PRESETS[idx];$('promoMode').value=p.mode;if(p.mode==='step'){$('promoOff').value=p.off;$('promoPer').value=p.per;}updateToggles();renderLive();render();};
+$('togglePromo').onclick=()=>{let idx=currentPromoPresetIdx();idx=idx<0?0:(idx+1)%PROMO_PRESETS.length;const p=PROMO_PRESETS[idx];$('promoMode').value=p.mode;if(p.mode==='step'){$('promoOff').value=p.off;$('promoPer').value=p.per;}updateToggles();renderLive();render();};
 $('toggleLto')&&($('toggleLto').onclick=()=>{const cur=$('ltoMode').value;let i=LTO_PRESETS.findIndex(p=>p.mode===cur);i=(i+1)%LTO_PRESETS.length;$('ltoMode').value=LTO_PRESETS[i].mode;updateToggles();renderLive();render();});
-function setPromoClose(on){$('promoLock').value=on?'on':'off';if(on)$('promoMode').value='none';updateToggles();renderLive();render();}
-$('promoCloseCtl')&&($('promoCloseCtl').onclick=()=>setPromoClose($('promoLock').value!=='on'));
-$('promoCloseCtl')&&$('promoCloseCtl').addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();setPromoClose($('promoLock').value!=='on');}});
 $('settingsBtn').onclick=()=>{$('settingsModal').classList.remove('hidden');refreshSegs();};
 $('settingsClose').onclick=()=>{$('settingsModal').classList.add('hidden');};
 $('settingsBackdrop').onclick=()=>{$('settingsModal').classList.add('hidden');};
