@@ -126,6 +126,41 @@
   .toggles button.off .t-val{color:var(--muted);}
   .toggles button.off .t-lbl{color:var(--muted);}
 
+  /* ─── close (disable) old promo ─── */
+  .promo-close{display:inline-flex;align-items:center;gap:8px;margin:12px 4px 0;
+    cursor:pointer;-webkit-user-select:none;user-select:none;}
+  .promo-close .pc-box{width:17px;height:17px;border:1.5px solid var(--ink-soft);
+    border-radius:5px;background:var(--card);position:relative;flex-shrink:0;
+    transition:background .15s,border-color .15s;}
+  .promo-close.on .pc-box{background:var(--accent);border-color:var(--accent);}
+  .promo-close.on .pc-box::after{content:'';position:absolute;left:5px;top:1px;
+    width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+  .promo-close .pc-txt{font-size:10px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.2em;color:var(--ink-soft);}
+  .promo-close.on .pc-txt{color:var(--accent);}
+
+  /* ─── limited-time (Aug) promo bar ─── */
+  .lto-bar{margin:28px 0 0;}
+  .lto-bar.hidden{display:none;}
+  .lto-bar:not(.hidden) + .toggles{margin-top:10px;}
+  .lto-toggle{width:100%;border:1.5px solid var(--accent);background:var(--tag-bg);
+    padding:13px 16px;cursor:pointer;font-family:var(--sans);border-radius:999px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    transition:background .15s,border-color .15s;}
+  .lto-toggle:active{background:#f7d9c0;}
+  .lto-toggle .lto-head{display:flex;align-items:center;gap:8px;min-width:0;}
+  .lto-toggle .t-lbl{font-size:9px;color:var(--accent);font-weight:800;
+    text-transform:uppercase;letter-spacing:.22em;}
+  .lto-toggle .t-tag{font-size:7.5px;font-weight:800;letter-spacing:.06em;color:#fff;
+    background:var(--accent);border-radius:999px;padding:2px 7px;line-height:1;
+    font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .lto-toggle .t-val{font-size:13px;color:var(--ink);font-weight:800;
+    letter-spacing:.01em;white-space:nowrap;}
+  .lto-toggle.off{background:var(--paper);border-color:var(--line);}
+  .lto-toggle.off .t-lbl{color:var(--muted);}
+  .lto-toggle.off .t-tag{background:var(--muted);}
+  .lto-toggle.off .t-val{color:var(--muted);}
+
   /* ─── compare panel ─── */
   .compare-panel{background:var(--card);border:1.5px solid var(--accent);margin-bottom:14px;
     padding:14px 16px 16px;border-radius:20px;}
@@ -330,11 +365,30 @@
     <div id="live"></div>
   </div>
 
+  <div class="lto-bar hidden" id="ltoBar">
+    <button id="toggleLto" class="lto-toggle" type="button">
+      <span class="lto-head"><span class="t-lbl">Aug Promo</span><span class="t-tag">8/1-8/23</span></span>
+      <span class="t-val">Off</span>
+    </button>
+  </div>
   <div class="toggles">
     <button id="togglePromo" type="button"><span class="t-lbl">Promo</span><span class="t-val">Step</span></button>
     <button id="toggleMbs" type="button"><span class="t-lbl">MBS</span><span class="t-val">On</span></button>
     <button id="toggleTax" type="button"><span class="t-lbl">Tax</span><span class="t-val">On</span></button>
   </div>
+  <div class="promo-close" id="promoCloseCtl" role="checkbox" aria-checked="false" tabindex="0">
+    <span class="pc-box"></span><span class="pc-txt">Close</span>
+  </div>
+  <select id="ltoMode" class="sr-only" aria-hidden="true">
+    <option value="off">Off</option>
+    <option value="step">$10 off</option>
+    <option value="step5">$10 +5%</option>
+    <option value="step5vip">$10 +5%+VIP</option>
+  </select>
+  <select id="promoLock" class="sr-only" aria-hidden="true">
+    <option value="off">Unlocked</option>
+    <option value="on">Locked</option>
+  </select>
 
   <div class="section-label">
     <span class="ttl">Ledger <em>— saved entries</em></span>
@@ -433,7 +487,7 @@ const yuan=n=>(n<0?'-¥':'¥')+Math.abs(n).toFixed(2);
 let rows=[];
 
 const STORAGE_KEY='epc-mobile-v1';
-const SETTING_IDS=['promoOff','promoPer','promoPct','promoMode','mbsRate','mbsOn','refundOn','fx'];
+const SETTING_IDS=['promoOff','promoPer','promoPct','promoMode','ltoMode','promoLock','mbsRate','mbsOn','refundOn','fx'];
 let compareSet=new Set();
 const PROMO_PRESETS=[
   {mode:'step',off:6,per:100,label:'$6 off'},
@@ -442,6 +496,30 @@ const PROMO_PRESETS=[
   {mode:'vip',label:'VIP 5%'},
   {mode:'none',label:'None'}
 ];
+// Limited-time August promo — all built on $10 off per $100 spend
+const LTO_PRESETS=[
+  {mode:'off',label:'Off'},
+  {mode:'step',label:'$10 off'},
+  {mode:'step5',label:'$10 +5%'},
+  {mode:'step5vip',label:'$10 +5%+VIP'}
+];
+// Visible today (2026-07-29) through end of 2026-08-23
+function ltoWindowActive(){
+  const now=new Date();
+  return now>=new Date(2026,6,29,0,0,0)&&now<=new Date(2026,7,23,23,59,59,999);
+}
+function applyLtoVisibility(){
+  const on=ltoWindowActive(),bar=$('ltoBar');
+  if(bar)bar.classList.toggle('hidden',!on);
+  if(!on&&$('ltoMode')&&$('ltoMode').value!=='off')$('ltoMode').value='off';
+}
+// Only one promo applies: the Aug promo wins when on; otherwise the old promo
+// (unless it's been "closed" to None).
+function effPromo(s){
+  if(s.lto&&s.lto!=='off')return {pmode:s.lto,off:10,per:100,pct:5};
+  if(s.lock)return {pmode:'none'};
+  return {pmode:s.pmode,off:s.off,per:s.per,pct:s.pct};
+}
 function currentPromoPresetIdx(){
   const m=$('promoMode').value,o=+$('promoOff').value,p=+$('promoPer').value;
   for(let i=0;i<PROMO_PRESETS.length;i++){
@@ -471,26 +549,32 @@ function gstRefund(a){
 }
 function settings(){return{
   off:+$('promoOff').value,per:+$('promoPer').value,pct:+$('promoPct').value,pmode:$('promoMode').value,
+  lto:$('ltoMode').value,lock:$('promoLock').value==='on',
   mbs:+$('mbsRate').value/100,mbsOn:$('mbsOn').value,
   refund:$('refundOn').value,fx:+$('fx').value
 };}
-function promoDisc(a,s){if(s.pmode==='none')return 0;if(s.pmode==='vip')return a*0.05;const p=(s.pct||10)/100;if(s.pmode==='pct10')return a*p;if(s.pmode==='pct15')return a*(0.05+0.95*p);if(s.per<=0||s.off<=0)return 0;return Math.floor(a/s.per)*s.off;}
+function promoDisc(a,p){if(p.pmode==='none')return 0;if(p.pmode==='vip')return a*0.05;const pc=(p.pct||10)/100;if(p.pmode==='pct10')return a*pc;if(p.pmode==='pct15')return a*(0.05+0.95*pc);if(p.per<=0||p.off<=0)return 0;const step=Math.floor(a/p.per)*p.off,afterStep=a-step;if(p.pmode==='step5')return step+afterStep*0.05;if(p.pmode==='step5vip')return step+afterStep*(1-0.95*0.95);return step;}
 function compute(a,s){
-  const disc=promoDisc(a,s),after=a-disc;
+  const ep=effPromo(s);
+  const disc=promoDisc(a,ep),after=a-disc;
   const mbsActive=s.mbsOn!=='off';
   const mbs=mbsActive?after/1.09*s.mbs:0;
   const refund=s.refund==='on'?gstRefund(after):0;
   const net=after-mbs-refund,saved=a-net,netRmb=net*s.fx;
-  return{a,disc,after,mbs,refund,net,saved,netRmb};
+  return{a,disc,after,mbs,refund,net,saved,netRmb,ep};
 }
-function promoLabel(s){
-  if(s.pmode==='none')return 'none';
-  if(s.pmode==='vip')return 'VIP 5%';
-  const p=s.pct||10;
-  if(s.pmode==='pct10')return p+'% off';
-  if(s.pmode==='pct15')return p+'% + VIP 5%';
-  return '$'+s.off+' off per $'+s.per;
+function promoLabelOf(p){
+  if(p.pmode==='none')return 'none';
+  if(p.pmode==='vip')return 'VIP 5%';
+  const pc=p.pct||10;
+  if(p.pmode==='pct10')return pc+'% off';
+  if(p.pmode==='pct15')return pc+'% + VIP 5%';
+  const base='$'+p.off+' off per $'+p.per;
+  if(p.pmode==='step5')return base+' + 5% off';
+  if(p.pmode==='step5vip')return base+' + 5% off + VIP 5%';
+  return base;
 }
+function promoLabel(s){return promoLabelOf(effPromo(s));}
 function mbsLabel(s){if(s.mbsOn==='off')return 'Off';return (s.mbs*100).toFixed(1).replace(/\.0$/,'')+'%';}
 function refundLabel(s){return s.refund==='on'?'YES':'NO';}
 function settingsNote(s){
@@ -504,18 +588,32 @@ function refreshSegs(){
   });
 }
 function updateToggles(){
+  applyLtoVisibility();
   const pm=$('promoMode').value;
+  const locked=$('promoLock').value==='on';
+  const ltoOn=$('ltoMode').value!=='off';
+  // Old Promo toggle shows the OLD promo label only (never the Aug one)
   let pmTxt;
-  if(pm==='step'){
+  if(locked){
+    pmTxt='None';
+  }else if(pm==='step'){
     const idx=currentPromoPresetIdx();
     pmTxt=idx>=0?PROMO_PRESETS[idx].label:'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
   }else{
-    pmTxt=promoLabel(settings());
+    const l=promoLabelOf({pmode:pm,off:+$('promoOff').value,per:+$('promoPer').value,pct:+$('promoPct').value});
+    pmTxt=l==='none'?'None':l;
   }
   $('togglePromo').querySelector('.t-val').textContent=pmTxt;
-  $('togglePromo').classList.toggle('off',pm==='none');
-  const stepActive=pm==='step';
-  const pctActive=pm==='pct10'||pm==='pct15';
+  // Grey the old Promo toggle when it has no effect (closed, or overridden by Aug promo)
+  $('togglePromo').classList.toggle('off',locked||ltoOn||pm==='none');
+  const cc=$('promoCloseCtl');
+  if(cc){cc.classList.toggle('on',locked);cc.setAttribute('aria-checked',locked?'true':'false');}
+  // Aug promo toggle
+  const lt=LTO_PRESETS.find(p=>p.mode===$('ltoMode').value)||LTO_PRESETS[0];
+  const ltEl=$('toggleLto');
+  if(ltEl){ltEl.querySelector('.t-val').textContent=lt.label;ltEl.classList.toggle('off',!ltoOn);}
+  const stepActive=pm==='step'&&!locked;
+  const pctActive=(pm==='pct10'||pm==='pct15')&&!locked;
   $('promoOff').disabled=!stepActive;
   $('promoPer').disabled=!stepActive;
   $('promoPct').disabled=!pctActive;
@@ -662,7 +760,11 @@ $('amt').addEventListener('input',renderLive);
 $('amt').addEventListener('keyup',renderLive);
 $('amt').addEventListener('keydown',e=>{if(e.key==='Enter')$('addBtn').click();});
 SETTING_IDS.forEach(id=>$(id).addEventListener('input',()=>{renderLive();render();}));
-$('togglePromo').onclick=()=>{let idx=currentPromoPresetIdx();idx=idx<0?0:(idx+1)%PROMO_PRESETS.length;const p=PROMO_PRESETS[idx];$('promoMode').value=p.mode;if(p.mode==='step'){$('promoOff').value=p.off;$('promoPer').value=p.per;}updateToggles();renderLive();render();};
+$('togglePromo').onclick=()=>{if($('promoLock').value==='on')return;let idx=currentPromoPresetIdx();idx=idx<0?0:(idx+1)%PROMO_PRESETS.length;const p=PROMO_PRESETS[idx];$('promoMode').value=p.mode;if(p.mode==='step'){$('promoOff').value=p.off;$('promoPer').value=p.per;}updateToggles();renderLive();render();};
+$('toggleLto')&&($('toggleLto').onclick=()=>{const cur=$('ltoMode').value;let i=LTO_PRESETS.findIndex(p=>p.mode===cur);i=(i+1)%LTO_PRESETS.length;$('ltoMode').value=LTO_PRESETS[i].mode;updateToggles();renderLive();render();});
+function setPromoClose(on){$('promoLock').value=on?'on':'off';if(on)$('promoMode').value='none';updateToggles();renderLive();render();}
+$('promoCloseCtl')&&($('promoCloseCtl').onclick=()=>setPromoClose($('promoLock').value!=='on'));
+$('promoCloseCtl')&&$('promoCloseCtl').addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();setPromoClose($('promoLock').value!=='on');}});
 $('settingsBtn').onclick=()=>{$('settingsModal').classList.remove('hidden');refreshSegs();};
 $('settingsClose').onclick=()=>{$('settingsModal').classList.add('hidden');};
 $('settingsBackdrop').onclick=()=>{$('settingsModal').classList.add('hidden');};
