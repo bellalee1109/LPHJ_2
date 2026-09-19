@@ -528,7 +528,7 @@ function settings(){return{
   mbs:+$('mbsRate').value/100,mbsOn:$('mbsOn').value,
   refund:$('refundOn').value,fx:+$('fx').value
 };}
-function promoDisc(a,p){if(p.pmode==='none')return 0;if(p.pmode==='vip')return a*0.05;const pc=(p.pct||10)/100;if(p.pmode==='pct10')return a*pc;if(p.pmode==='pct15')return a*(0.05+0.95*pc);if(p.per<=0||p.off<=0)return 0;const step=Math.floor(a/p.per)*p.off,afterStep=a-step;if(p.pmode==='step5')return step+afterStep*0.05;if(p.pmode==='step10')return step+afterStep*0.10;if(p.pmode==='step5vip')return step+afterStep*(1-0.95*0.95);return step;}
+function promoDisc(a,p){if(p.pmode==='none')return 0;if(p.pmode==='vip')return a*0.05;const pc=(p.pct||10)/100;if(p.pmode==='pct10')return a*pc;if(p.pmode==='pct15')return a*(0.05+0.95*pc);if(p.per<=0||p.off<=0)return 0;const step=Math.floor(a/p.per)*p.off,afterStep=a-step;if(p.pmode==='step5')return step+afterStep*0.05;if(p.pmode==='step10')return step+afterStep*(1-0.95*0.95);if(p.pmode==='step5vip')return step+afterStep*(1-0.95*0.95);return step;}
 function compute(a,s){
   const ep=effPromo(s);
   const disc=promoDisc(a,ep),after=a-disc;
