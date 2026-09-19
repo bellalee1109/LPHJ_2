@@ -233,6 +233,8 @@
     font-family:var(--sans);font-size:13px;white-space:nowrap;letter-spacing:-.01em;}
   .brow.subt .val{color:var(--ink);font-weight:700;}
   .brow.subt .k{color:var(--ink);font-weight:600;}
+  .brow .val .s{font-size:10.5px;font-weight:600;margin-left:5px;
+    color:var(--muted);letter-spacing:0;font-variant-numeric:tabular-nums;}
   .brow .k .s{font-size:11.5px;font-weight:600;margin-left:6px;
     font-family:var(--sans);color:var(--ink-soft);font-style:normal;
     letter-spacing:.01em;font-variant-numeric:tabular-nums;}
@@ -618,7 +620,7 @@ function renderCompare(){
   h+=`<div class="cmp-grid" style="--cols:${cols}">`;
   h+=`<div class="cmp-row head"><span class="k"></span>${computed.map(({idx})=>`<span class="val">No. ${String(idx+1).padStart(2,'0')}</span>`).join('')}</div>`;
   h+=`<div class="cmp-row"><span class="k">Original</span>${computed.map(({c})=>`<span class="val neutral">${money(c.a)}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row"><span class="k">After</span>${computed.map(({c})=>`<span class="val neutral">${money(c.after)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">Paid</span>${computed.map(({c})=>`<span class="val neutral">${money(c.after)}</span>`).join('')}</div>`;
   h+=`<div class="cmp-row"><span class="k">Promo</span>${computed.map(({c})=>`<span class="val">${c.disc>0?'−'+money(c.disc):'—'}</span>`).join('')}</div>`;
   h+=`<div class="cmp-row"><span class="k">MBS</span>${computed.map(({c})=>`<span class="val">${c.mbs>0?'−'+money(c.mbs):'—'}</span>`).join('')}</div>`;
   h+=`<div class="cmp-row"><span class="k">Tax</span>${computed.map(({c})=>`<span class="val">${c.refund>0?'−'+money(c.refund):'—'}</span>`).join('')}</div>`;
@@ -628,7 +630,7 @@ function renderCompare(){
   h+=`</div>`;
   h+=`<div class="cmp-totals">`;
   h+=`<div class="cmp-tot-head">Total of ${cols} selected</div>`;
-  h+=`<div class="cmp-trow"><span class="k">After discount</span><span class="v">${money(tAfter)}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">Amount Paid</span><span class="v">${money(tAfter)}</span></div>`;
   h+=`<div class="cmp-trow"><span class="k">Promo discount</span><span class="v">${tDisc>0?'−'+money(tDisc):'—'}</span></div>`;
   h+=`<div class="cmp-trow"><span class="k">MBS rewards</span><span class="v">${tMbs>0?'−'+money(tMbs):'—'}</span></div>`;
   h+=`<div class="cmp-trow"><span class="k">Tax refund <em>(combined)</em></span><span class="v">${tRefund>0?'−'+money(tRefund):'—'}</span></div>`;
@@ -706,7 +708,7 @@ function render(){
         <div class="saved-box"><span class="lbl">Total saved</span><div class="v">${money(r.saved)} <span class="pc">${pc}%</span></div></div>
       </div>
       <div class="breakdown">
-        ${r.disc>0?`<div class="brow subt"><span class="k">After discount</span><span class="val">${money(r.after)}</span></div>
+        ${r.disc>0?`<div class="brow subt"><span class="k">Amount Paid</span><span class="val">${money(r.after)} <span class="s">${yuan(r.after*row.fx)}</span></span></div>
         <div class="brow"><span class="k">Promo discount <span class="s">(${promoLabel(row)})</span></span><span class="val">−${money(r.disc)}</span></div>`:''}
         <div class="brow"><span class="k">MBS rewards <span class="s">(${mbsLabel(row)})</span></span><span class="val">−${money(r.mbs)}</span></div>
         <div class="brow"><span class="k">GST refund <span class="s">(${refundLabel(row)})</span></span><span class="val">−${money(r.refund)}</span></div>
