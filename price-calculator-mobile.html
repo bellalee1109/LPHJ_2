@@ -462,8 +462,8 @@
 
 <script>
 const $=id=>document.getElementById(id);
-const money=n=>(n<0?'-$':'$')+Math.abs(n).toFixed(2);
-const yuan=n=>(n<0?'-¥':'¥')+Math.abs(n).toFixed(2);
+const money=n=>(n<0?'-$':'$')+Math.floor(Math.abs(n));
+const yuan=n=>(n<0?'-¥':'¥')+Math.floor(Math.abs(n));
 let rows=[];
 
 const STORAGE_KEY='epc-mobile-v1';
