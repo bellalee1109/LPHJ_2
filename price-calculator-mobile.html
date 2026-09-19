@@ -354,7 +354,7 @@
 
   <div class="lto-bar hidden" id="ltoBar">
     <button id="toggleLto" class="lto-toggle" type="button">
-      <span class="lto-head"><span class="t-lbl">Aug Promo</span><span class="t-tag">8/1-8/23</span></span>
+      <span class="lto-head"><span class="t-lbl">Sep Promo</span><span class="t-tag">9/19-10/7</span></span>
       <span class="t-val">Off</span>
     </button>
   </div>
@@ -367,7 +367,7 @@
     <option value="off">Off</option>
     <option value="step">$10 off</option>
     <option value="step5">$10 +5%</option>
-    <option value="step5vip">$10 +5%+VIP</option>
+    <option value="step10">$10 +10% VIP</option>
   </select>
 
   <div class="section-label">
@@ -476,24 +476,25 @@ const PROMO_PRESETS=[
   {mode:'vip',label:'VIP 5%'},
   {mode:'none',label:'None'}
 ];
-// Limited-time August promo — all built on $10 off per $100 spend
+// Limited-time promo (19 Sep – 7 Oct 2026) — all built on $10 off per $100 spend.
+// Base $10/$100 for everyone; with promo items +5% (non-VIP) or +10% (VIP).
 const LTO_PRESETS=[
   {mode:'off',label:'Off'},
   {mode:'step',label:'$10 off'},
   {mode:'step5',label:'$10 +5%'},
-  {mode:'step5vip',label:'$10 +5%+VIP'}
+  {mode:'step10',label:'$10 +10% VIP'}
 ];
-// Visible today (2026-07-29) through end of 2026-08-23
+// Visible 2026-09-19 through end of 2026-10-07
 function ltoWindowActive(){
   const now=new Date();
-  return now>=new Date(2026,6,29,0,0,0)&&now<=new Date(2026,7,23,23,59,59,999);
+  return now>=new Date(2026,8,19,0,0,0)&&now<=new Date(2026,9,7,23,59,59,999);
 }
 function applyLtoVisibility(){
   const on=ltoWindowActive(),bar=$('ltoBar');
   if(bar)bar.classList.toggle('hidden',!on);
   if(!on&&$('ltoMode')&&$('ltoMode').value!=='off')$('ltoMode').value='off';
 }
-// Only one promo applies: the Aug promo wins when on; otherwise the old promo.
+// Only one promo applies: the limited-time promo wins when on; otherwise the old promo.
 function effPromo(s){
   if(s.lto&&s.lto!=='off')return {pmode:s.lto,off:10,per:100,pct:5};
   return {pmode:s.pmode,off:s.off,per:s.per,pct:s.pct};
@@ -527,7 +528,7 @@ function settings(){return{
   mbs:+$('mbsRate').value/100,mbsOn:$('mbsOn').value,
   refund:$('refundOn').value,fx:+$('fx').value
 };}
-function promoDisc(a,p){if(p.pmode==='none')return 0;if(p.pmode==='vip')return a*0.05;const pc=(p.pct||10)/100;if(p.pmode==='pct10')return a*pc;if(p.pmode==='pct15')return a*(0.05+0.95*pc);if(p.per<=0||p.off<=0)return 0;const step=Math.floor(a/p.per)*p.off,afterStep=a-step;if(p.pmode==='step5')return step+afterStep*0.05;if(p.pmode==='step5vip')return step+afterStep*(1-0.95*0.95);return step;}
+function promoDisc(a,p){if(p.pmode==='none')return 0;if(p.pmode==='vip')return a*0.05;const pc=(p.pct||10)/100;if(p.pmode==='pct10')return a*pc;if(p.pmode==='pct15')return a*(0.05+0.95*pc);if(p.per<=0||p.off<=0)return 0;const step=Math.floor(a/p.per)*p.off,afterStep=a-step;if(p.pmode==='step5')return step+afterStep*0.05;if(p.pmode==='step10')return step+afterStep*0.10;if(p.pmode==='step5vip')return step+afterStep*(1-0.95*0.95);return step;}
 function compute(a,s){
   const ep=effPromo(s);
   const disc=promoDisc(a,ep),after=a-disc;
@@ -545,6 +546,7 @@ function promoLabelOf(p){
   if(p.pmode==='pct15')return pc+'% + VIP 5%';
   const base='$'+p.off+' off per $'+p.per;
   if(p.pmode==='step5')return base+' + 5% off';
+  if(p.pmode==='step10')return base+' + 10% off (VIP)';
   if(p.pmode==='step5vip')return base+' + 5% off + VIP 5%';
   return base;
 }
