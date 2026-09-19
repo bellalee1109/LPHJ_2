@@ -367,7 +367,7 @@
     <option value="off">Off</option>
     <option value="step">$10 off</option>
     <option value="step5">$10 +5%</option>
-    <option value="step10">$10 +10% VIP</option>
+    <option value="step10">$10 +5%+VIP</option>
   </select>
 
   <div class="section-label">
@@ -482,7 +482,7 @@ const LTO_PRESETS=[
   {mode:'off',label:'Off'},
   {mode:'step',label:'$10 off'},
   {mode:'step5',label:'$10 +5%'},
-  {mode:'step10',label:'$10 +10% VIP'}
+  {mode:'step10',label:'$10 +5%+VIP'}
 ];
 // Visible 2026-09-19 through end of 2026-10-07
 function ltoWindowActive(){
@@ -546,7 +546,7 @@ function promoLabelOf(p){
   if(p.pmode==='pct15')return pc+'% + VIP 5%';
   const base='$'+p.off+' off per $'+p.per;
   if(p.pmode==='step5')return base+' + 5% off';
-  if(p.pmode==='step10')return base+' + 10% off (VIP)';
+  if(p.pmode==='step10')return base+' + 5% off + VIP 5%';
   if(p.pmode==='step5vip')return base+' + 5% off + VIP 5%';
   return base;
 }
