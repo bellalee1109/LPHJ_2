@@ -10,8 +10,8 @@
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@500;600;700&display=swap');
   :root{
     color-scheme:light;
-    --serif:'Cormorant Garamond','Noto Serif TC',Georgia,'Times New Roman',serif;
-    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --serif:'Cormorant Garamond','Noto Serif TC','Songti SC','Noto Serif SC',Georgia,'Times New Roman',serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','PingFang TC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
     --bg:#3d4f7e;
     --card:#ffffff;
     --paper:#e7edf5;
@@ -48,6 +48,14 @@
     text-transform:uppercase;letter-spacing:.28em;font-weight:600;
     display:flex;align-items:center;gap:10px;}
   header .tag::before,header .tag::after{content:'';flex:1;height:1px;background:var(--line);}
+  .lang-switch{display:inline-flex;gap:2px;margin:12px 0 0;padding:2px;
+    border:1.5px solid var(--ink-soft);background:var(--card);border-radius:999px;}
+  .lang-switch button{border:0;background:transparent;color:var(--ink-soft);
+    font-size:11px;font-weight:700;line-height:1;padding:6px 11px;cursor:pointer;
+    font-family:var(--sans);border-radius:999px;letter-spacing:.02em;
+    transition:background .15s,color .15s;}
+  .lang-switch button.on{background:var(--ink);color:var(--card);}
+  .lang-switch button:active:not(.on){background:var(--hair);}
 
   .pad{padding:22px 18px 0;}
 
@@ -338,32 +346,37 @@
 </head>
 <body>
 <header>
-  <h1>Price Calculator</h1>
-  <button class="settings-btn" id="settingsBtn" type="button" aria-label="Settings">☰</button>
+  <h1 data-i18n="title">Price Calculator</h1>
+  <div class="lang-switch" id="langSwitch">
+    <button type="button" data-lang="en">EN</button>
+    <button type="button" data-lang="hant">繁</button>
+    <button type="button" data-lang="hans">簡</button>
+  </div>
+  <button class="settings-btn" id="settingsBtn" type="button" data-i18n-aria="settings" aria-label="Settings">☰</button>
 </header>
 
 <div class="pad">
   <div class="entry">
-    <label>Amount</label>
+    <label data-i18n="amount">Amount</label>
     <div class="amt-bar">
       <div class="amt-row">
         <div class="amt-wrap"><span>$</span><input id="amt" type="number" inputmode="decimal" placeholder="0" value=""></div>
       </div>
-      <button id="addBtn">Add</button>
+      <button id="addBtn" data-i18n="add">Add</button>
     </div>
     <div id="live"></div>
   </div>
 
   <div class="lto-bar hidden" id="ltoBar">
     <button id="toggleLto" class="lto-toggle" type="button">
-      <span class="lto-head"><span class="t-lbl">Sep Promo</span><span class="t-tag">9/19-10/7</span></span>
+      <span class="lto-head"><span class="t-lbl" data-i18n="lto.title">Sep Promo</span><span class="t-tag">9/19-10/7</span></span>
       <span class="t-val">Off</span>
     </button>
   </div>
   <div class="toggles">
-    <button id="togglePromo" type="button"><span class="t-lbl">Promo</span><span class="t-val">Step</span></button>
-    <button id="toggleMbs" type="button"><span class="t-lbl">MBS</span><span class="t-val">On</span></button>
-    <button id="toggleTax" type="button"><span class="t-lbl">Tax</span><span class="t-val">On</span></button>
+    <button id="togglePromo" type="button"><span class="t-lbl" data-i18n="promo">Promo</span><span class="t-val">Step</span></button>
+    <button id="toggleMbs" type="button"><span class="t-lbl" data-i18n="mbs">MBS</span><span class="t-val">On</span></button>
+    <button id="toggleTax" type="button"><span class="t-lbl" data-i18n="tax">Tax</span><span class="t-val">On</span></button>
   </div>
   <select id="ltoMode" class="sr-only" aria-hidden="true">
     <option value="off">Off</option>
@@ -373,11 +386,11 @@
   </select>
 
   <div class="section-label">
-    <span class="ttl">Ledger <em>— saved entries</em></span>
-    <button id="clearBtn" class="hidden">Clear</button>
+    <span class="ttl"><span data-i18n="ledger">Ledger</span> <em data-i18n="ledger.sub">— saved entries</em></span>
+    <button id="clearBtn" class="hidden" data-i18n="clear">Clear</button>
   </div>
   <div class="compare-panel" id="comparePanel"></div>
-  <div id="list"><div class="empty">Saved entries will appear here.</div></div>
+  <div id="list"><div class="empty" data-i18n="empty">Saved entries will appear here.</div></div>
 
 </div>
 
@@ -385,12 +398,12 @@
   <div class="settings-backdrop" id="settingsBackdrop"></div>
   <div class="settings-sheet">
     <div class="settings-head">
-      <span class="ttl">Settings &amp; Rates</span>
-      <button class="settings-close" id="settingsClose" type="button">Done</button>
+      <span class="ttl" data-i18n="settings.title">Settings &amp; Rates</span>
+      <button class="settings-close" id="settingsClose" type="button" data-i18n="done">Done</button>
     </div>
     <div class="setting">
       <div class="sgs">
-        <div class="sg-h2">Promo</div>
+        <div class="sg-h2" data-i18n="promo">Promo</div>
         <select id="promoMode" class="sr-only">
           <option value="step">Promo</option>
           <option value="pct10">10% off</option>
@@ -399,16 +412,16 @@
           <option value="none">None</option>
         </select>
         <div class="seg seg-lg" data-for="promoMode">
-          <button type="button" data-v="step">Promo</button>
+          <button type="button" data-v="step" data-i18n="promo">Promo</button>
           <button type="button" data-v="pct10">10%</button>
           <button type="button" data-v="pct15">10+5</button>
           <button type="button" data-v="vip">VIP</button>
-          <button type="button" data-v="none">None</button>
+          <button type="button" data-v="none" data-i18n="pp.none">None</button>
         </div>
         <div class="sg-line promo-step">
-          <span class="sg-lbl">Off</span>
+          <span class="sg-lbl" data-i18n="promo.off">Off</span>
           <div class="field has-pre"><span class="pre">$</span><input id="promoOff" type="number" inputmode="decimal" value="6"></div>
-          <span class="sg-lbl">Per</span>
+          <span class="sg-lbl" data-i18n="promo.per">Per</span>
           <div class="field has-pre"><span class="pre">$</span><input id="promoPer" type="number" inputmode="decimal" value="100"></div>
         </div>
         <div class="sg-line promo-pct">
@@ -418,31 +431,31 @@
       </div>
 
       <div class="sgs">
-        <div class="sg-h2">MBS Rewards</div>
+        <div class="sg-h2" data-i18n="mbs.title">MBS Rewards</div>
         <select id="mbsOn" class="sr-only">
           <option value="on">On</option>
           <option value="off">Off</option>
         </select>
         <div class="sg-line toggle-row">
           <div class="seg seg-lg" data-for="mbsOn">
-            <button type="button" data-v="on">On</button>
-            <button type="button" data-v="off">Off</button>
+            <button type="button" data-v="on" data-i18n="on">On</button>
+            <button type="button" data-v="off" data-i18n="off">Off</button>
           </div>
-          <span class="sg-lbl">Rate</span>
+          <span class="sg-lbl" data-i18n="rate">Rate</span>
           <div class="field sg-rate"><input id="mbsRate" type="number" inputmode="decimal" value="3"><span class="suf">%</span></div>
         </div>
       </div>
 
       <div class="sgs">
-        <div class="sg-h2">Tax Refund</div>
+        <div class="sg-h2" data-i18n="tax.title">Tax Refund</div>
         <select id="refundOn" class="sr-only">
           <option value="on">On</option>
           <option value="off">Off</option>
         </select>
         <div class="sg-line toggle-row">
           <div class="seg seg-lg" data-for="refundOn">
-            <button type="button" data-v="on">On</button>
-            <button type="button" data-v="off">Off</button>
+            <button type="button" data-v="on" data-i18n="on">On</button>
+            <button type="button" data-v="off" data-i18n="off">Off</button>
           </div>
           <span></span>
           <span></span>
@@ -450,10 +463,10 @@
       </div>
 
       <div class="sgs">
-        <div class="sg-h2">FX Rate</div>
+        <div class="sg-h2" data-i18n="fx.title">FX Rate</div>
         <div class="sg-line toggle-row">
           <div class="field has-pre"><span class="pre">¥</span><input id="fx" type="number" inputmode="decimal" value="5.3"></div>
-          <span class="sg-lbl">RMB</span>
+          <span class="sg-lbl" data-i18n="rmb">RMB</span>
           <span></span>
         </div>
       </div>
@@ -468,23 +481,102 @@ const money=n=>(n<0?'-$':'$')+Math.floor(Math.abs(n));
 const yuan=n=>(n<0?'-¥':'¥')+Math.floor(Math.abs(n));
 let rows=[];
 
+// ─── i18n ───
+const I18N={
+  en:{
+    title:'Price Calculator', settings:'Settings', amount:'Amount', add:'Add',
+    'lto.title':'Sep Promo', promo:'Promo', mbs:'MBS', tax:'Tax',
+    ledger:'Ledger', 'ledger.sub':'— saved entries', clear:'Clear',
+    empty:'Saved entries will appear here.',
+    'settings.title':'Settings & Rates', done:'Done',
+    'promo.off':'Off', 'promo.per':'Per', 'mbs.title':'MBS Rewards', rate:'Rate',
+    'tax.title':'Tax Refund', 'fx.title':'FX Rate', rmb:'RMB', on:'On', off:'Off',
+    'live.realcost':'Real cost of {x}', saved:'Saved', gst:'GST', fx:'FX',
+    num:'No.', remove:'Remove', originalPrice:'Original price', totalSaved:'Total saved',
+    amountPaid:'Amount Paid', promoDiscount:'Promo discount', mbsRewards:'MBS rewards',
+    gstRefund:'GST refund', finalPrice:'Final Price',
+    compare:'Compare', entries:'entries', close:'Close', original:'Original', paid:'Paid',
+    final:'Final', totalOf:'Total of {n} selected', taxRefund:'Tax refund', combined:'(combined)',
+    refundYes:'YES', refundNo:'NO',
+    'pp.step6':'$6 off', 'pp.pct10':'10% off', 'pp.pct15':'10% + VIP 5%', 'pp.vip':'VIP 5%', 'pp.none':'None',
+    'lto.off':'Off', 'lto.step':'$10 off', 'lto.step5':'$10 +5%', 'lto.step10':'$10 +5%+VIP',
+    'pl.pct':'{pc}% off', 'pl.pctVip':'{pc}% + VIP 5%', 'pl.step':'{off} off per {per}',
+    'pl.sfx5':' + 5% off', 'pl.sfx10':' + 5% off + VIP 5%'
+  },
+  hans:{
+    title:'价格计算器', settings:'设置', amount:'金额', add:'添加',
+    'lto.title':'限时优惠', promo:'优惠', mbs:'MBS', tax:'退税',
+    ledger:'账本', 'ledger.sub':'— 已存记录', clear:'清除',
+    empty:'保存的记录会显示在这里。',
+    'settings.title':'设置与费率', done:'完成',
+    'promo.off':'减', 'promo.per':'每', 'mbs.title':'MBS 奖励', rate:'费率',
+    'tax.title':'退税', 'fx.title':'汇率', rmb:'人民币', on:'开', off:'关',
+    'live.realcost':'{x} 实际花费', saved:'已省', gst:'退税', fx:'汇率',
+    num:'第', remove:'删除', originalPrice:'原价', totalSaved:'共省',
+    amountPaid:'实付金额', promoDiscount:'优惠折扣', mbsRewards:'MBS 奖励',
+    gstRefund:'消费税退税', finalPrice:'最终价格',
+    compare:'对比', entries:'笔', close:'关闭', original:'原价', paid:'实付',
+    final:'最终', totalOf:'已选 {n} 笔合计', taxRefund:'退税', combined:'（合计）',
+    refundYes:'是', refundNo:'否',
+    'pp.step6':'减$6', 'pp.pct10':'减10%', 'pp.pct15':'10%+VIP5%', 'pp.vip':'VIP 5%', 'pp.none':'无',
+    'lto.off':'关', 'lto.step':'减$10', 'lto.step5':'$10 +5%', 'lto.step10':'$10 +5%+VIP',
+    'pl.pct':'减{pc}%', 'pl.pctVip':'{pc}%+VIP5%', 'pl.step':'每消费{per}减{off}',
+    'pl.sfx5':' + 额外5%', 'pl.sfx10':' + 额外5% + VIP 5%'
+  },
+  hant:{
+    title:'價格計算器', settings:'設定', amount:'金額', add:'新增',
+    'lto.title':'限時優惠', promo:'優惠', mbs:'MBS', tax:'退稅',
+    ledger:'帳本', 'ledger.sub':'— 已存記錄', clear:'清除',
+    empty:'儲存的記錄會顯示在這裡。',
+    'settings.title':'設定與費率', done:'完成',
+    'promo.off':'減', 'promo.per':'每', 'mbs.title':'MBS 獎勵', rate:'費率',
+    'tax.title':'退稅', 'fx.title':'匯率', rmb:'人民幣', on:'開', off:'關',
+    'live.realcost':'{x} 實際花費', saved:'已省', gst:'退稅', fx:'匯率',
+    num:'第', remove:'刪除', originalPrice:'原價', totalSaved:'共省',
+    amountPaid:'實付金額', promoDiscount:'優惠折扣', mbsRewards:'MBS 獎勵',
+    gstRefund:'消費稅退稅', finalPrice:'最終價格',
+    compare:'比較', entries:'筆', close:'關閉', original:'原價', paid:'實付',
+    final:'最終', totalOf:'已選 {n} 筆合計', taxRefund:'退稅', combined:'（合計）',
+    refundYes:'是', refundNo:'否',
+    'pp.step6':'減$6', 'pp.pct10':'減10%', 'pp.pct15':'10%+VIP5%', 'pp.vip':'VIP 5%', 'pp.none':'無',
+    'lto.off':'關', 'lto.step':'減$10', 'lto.step5':'$10 +5%', 'lto.step10':'$10 +5%+VIP',
+    'pl.pct':'減{pc}%', 'pl.pctVip':'{pc}%+VIP5%', 'pl.step':'每消費{per}減{off}',
+    'pl.sfx5':' + 額外5%', 'pl.sfx10':' + 額外5% + VIP 5%'
+  }
+};
+let LANG='hans';
+function t(key,vars){
+  const tab=I18N[LANG]||I18N.en;
+  let s=tab[key]; if(s==null)s=I18N.en[key]; if(s==null)s=key;
+  if(vars)for(const k in vars)s=s.split('{'+k+'}').join(vars[k]);
+  return s;
+}
+function applyLang(){
+  document.documentElement.lang = LANG==='hant'?'zh-Hant':LANG==='hans'?'zh-Hans':'en';
+  document.title=t('title');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'));});
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')));});
+  document.querySelectorAll('#langSwitch button').forEach(b=>b.classList.toggle('on',b.dataset.lang===LANG));
+  updateToggles();renderLive();render();
+}
+
 const STORAGE_KEY='epc-mobile-v1';
 const SETTING_IDS=['promoOff','promoPer','promoPct','promoMode','ltoMode','mbsRate','mbsOn','refundOn','fx'];
 let compareSet=new Set();
 const PROMO_PRESETS=[
-  {mode:'step',off:6,per:100,label:'$6 off'},
-  {mode:'pct10',label:'10% off'},
-  {mode:'pct15',label:'10% + VIP 5%'},
-  {mode:'vip',label:'VIP 5%'},
-  {mode:'none',label:'None'}
+  {mode:'step',off:6,per:100,key:'pp.step6'},
+  {mode:'pct10',key:'pp.pct10'},
+  {mode:'pct15',key:'pp.pct15'},
+  {mode:'vip',key:'pp.vip'},
+  {mode:'none',key:'pp.none'}
 ];
 // Limited-time promo (19 Sep – 7 Oct 2026) — all built on $10 off per $100 spend.
 // Base $10/$100 for everyone; with promo items +5% (non-VIP) or +10% (VIP).
 const LTO_PRESETS=[
-  {mode:'off',label:'Off'},
-  {mode:'step',label:'$10 off'},
-  {mode:'step5',label:'$10 +5%'},
-  {mode:'step10',label:'$10 +5%+VIP'}
+  {mode:'off',key:'lto.off'},
+  {mode:'step',key:'lto.step'},
+  {mode:'step5',key:'lto.step5'},
+  {mode:'step10',key:'lto.step10'}
 ];
 // Visible 2026-09-19 through end of 2026-10-07
 function ltoWindowActive(){
@@ -541,20 +633,20 @@ function compute(a,s){
   return{a,disc,after,mbs,refund,net,saved,netRmb,ep};
 }
 function promoLabelOf(p){
-  if(p.pmode==='none')return 'none';
-  if(p.pmode==='vip')return 'VIP 5%';
+  if(p.pmode==='none')return t('pp.none');
+  if(p.pmode==='vip')return t('pp.vip');
   const pc=p.pct||10;
-  if(p.pmode==='pct10')return pc+'% off';
-  if(p.pmode==='pct15')return pc+'% + VIP 5%';
-  const base='$'+p.off+' off per $'+p.per;
-  if(p.pmode==='step5')return base+' + 5% off';
-  if(p.pmode==='step10')return base+' + 5% off + VIP 5%';
-  if(p.pmode==='step5vip')return base+' + 5% off + VIP 5%';
+  if(p.pmode==='pct10')return t('pl.pct',{pc});
+  if(p.pmode==='pct15')return t('pl.pctVip',{pc});
+  const base=t('pl.step',{off:'$'+p.off,per:'$'+p.per});
+  if(p.pmode==='step5')return base+t('pl.sfx5');
+  if(p.pmode==='step10')return base+t('pl.sfx10');
+  if(p.pmode==='step5vip')return base+t('pl.sfx10');
   return base;
 }
 function promoLabel(s){return promoLabelOf(effPromo(s));}
-function mbsLabel(s){if(s.mbsOn==='off')return 'Off';return (s.mbs*100).toFixed(1).replace(/\.0$/,'')+'%';}
-function refundLabel(s){return s.refund==='on'?'YES':'NO';}
+function mbsLabel(s){if(s.mbsOn==='off')return t('off');return (s.mbs*100).toFixed(1).replace(/\.0$/,'')+'%';}
+function refundLabel(s){return s.refund==='on'?t('refundYes'):t('refundNo');}
 function settingsNote(s){
   return 'Promo: '+promoLabel(s)+' · MBS '+mbsLabel(s)+' · GST refund '+refundLabel(s)+' · FX ¥'+s.fx+'/S$1';
 }
@@ -573,10 +665,9 @@ function updateToggles(){
   let pmTxt;
   if(pm==='step'){
     const idx=currentPromoPresetIdx();
-    pmTxt=idx>=0?PROMO_PRESETS[idx].label:'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
+    pmTxt=idx>=0?t(PROMO_PRESETS[idx].key):'$'+(+$('promoOff').value)+' / $'+(+$('promoPer').value);
   }else{
-    const l=promoLabelOf({pmode:pm,off:+$('promoOff').value,per:+$('promoPer').value,pct:+$('promoPct').value});
-    pmTxt=l==='none'?'None':l;
+    pmTxt=promoLabelOf({pmode:pm,off:+$('promoOff').value,per:+$('promoPer').value,pct:+$('promoPct').value});
   }
   $('togglePromo').querySelector('.t-val').textContent=pmTxt;
   // Grey the old Promo toggle when it has no effect (overridden by the Aug promo)
@@ -584,7 +675,7 @@ function updateToggles(){
   // Aug promo toggle
   const lt=LTO_PRESETS.find(p=>p.mode===$('ltoMode').value)||LTO_PRESETS[0];
   const ltEl=$('toggleLto');
-  if(ltEl){ltEl.querySelector('.t-val').textContent=lt.label;ltEl.classList.toggle('off',!ltoOn);}
+  if(ltEl){ltEl.querySelector('.t-val').textContent=t(lt.key);ltEl.classList.toggle('off',!ltoOn);}
   const stepActive=pm==='step';
   const pctActive=pm==='pct10'||pm==='pct15';
   $('promoOff').disabled=!stepActive;
@@ -594,10 +685,10 @@ function updateToggles(){
   document.querySelector('.promo-pct')&&document.querySelector('.promo-pct').classList.toggle('dim',!pctActive);
   refreshSegs();
   const mo=$('mbsOn').value;
-  $('toggleMbs').querySelector('.t-val').textContent=mo==='off'?'Off':(+$('mbsRate').value)+'%';
+  $('toggleMbs').querySelector('.t-val').textContent=mo==='off'?t('off'):(+$('mbsRate').value)+'%';
   $('toggleMbs').classList.toggle('off',mo==='off');
   const ro=$('refundOn').value;
-  $('toggleTax').querySelector('.t-val').textContent=ro==='off'?'Off':'On';
+  $('toggleTax').querySelector('.t-val').textContent=ro==='off'?t('off'):t('on');
   $('toggleTax').classList.toggle('off',ro==='off');
 }
 function renderCompare(){
@@ -616,26 +707,26 @@ function renderCompare(){
   const tNet=tAfter-tMbs-tRefund;
   const tSaved=tA-tNet;
   const tRmb=tNet*(+$('fx').value);
-  let h=`<div class="cmp-head"><span>Compare · ${cols} entries</span><button class="cmp-close" id="cmpCloseBtn">Close</button></div>`;
+  let h=`<div class="cmp-head"><span>${t('compare')} · ${cols} ${t('entries')}</span><button class="cmp-close" id="cmpCloseBtn">${t('close')}</button></div>`;
   h+=`<div class="cmp-grid" style="--cols:${cols}">`;
-  h+=`<div class="cmp-row head"><span class="k"></span>${computed.map(({idx})=>`<span class="val">No. ${String(idx+1).padStart(2,'0')}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row"><span class="k">Original</span>${computed.map(({c})=>`<span class="val neutral">${money(c.a)}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row"><span class="k">Paid</span>${computed.map(({c})=>`<span class="val neutral">${money(c.after)}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row"><span class="k">Promo</span>${computed.map(({c})=>`<span class="val">${c.disc>0?'−'+money(c.disc):'—'}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row"><span class="k">MBS</span>${computed.map(({c})=>`<span class="val">${c.mbs>0?'−'+money(c.mbs):'—'}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row"><span class="k">Tax</span>${computed.map(({c})=>`<span class="val">${c.refund>0?'−'+money(c.refund):'—'}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row"><span class="k">Saved</span>${computed.map(({c})=>`<span class="val">${money(c.saved)}</span>`).join('')}</div>`;
-  h+=`<div class="cmp-row final"><span class="k">Final</span>${computed.map(({c})=>`<span class="val">${money(c.net)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row head"><span class="k"></span>${computed.map(({idx})=>`<span class="val">${t('num')} ${String(idx+1).padStart(2,'0')}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">${t('original')}</span>${computed.map(({c})=>`<span class="val neutral">${money(c.a)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">${t('paid')}</span>${computed.map(({c})=>`<span class="val neutral">${money(c.after)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">${t('promo')}</span>${computed.map(({c})=>`<span class="val">${c.disc>0?'−'+money(c.disc):'—'}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">${t('mbs')}</span>${computed.map(({c})=>`<span class="val">${c.mbs>0?'−'+money(c.mbs):'—'}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">${t('tax')}</span>${computed.map(({c})=>`<span class="val">${c.refund>0?'−'+money(c.refund):'—'}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row"><span class="k">${t('saved')}</span>${computed.map(({c})=>`<span class="val">${money(c.saved)}</span>`).join('')}</div>`;
+  h+=`<div class="cmp-row final"><span class="k">${t('final')}</span>${computed.map(({c})=>`<span class="val">${money(c.net)}</span>`).join('')}</div>`;
   h+=`<div class="cmp-row"><span class="k">¥</span>${computed.map(({c})=>`<span class="val">${yuan(c.netRmb)}</span>`).join('')}</div>`;
   h+=`</div>`;
   h+=`<div class="cmp-totals">`;
-  h+=`<div class="cmp-tot-head">Total of ${cols} selected</div>`;
-  h+=`<div class="cmp-trow"><span class="k">Amount Paid</span><span class="v">${money(tAfter)}</span></div>`;
-  h+=`<div class="cmp-trow"><span class="k">Promo discount</span><span class="v">${tDisc>0?'−'+money(tDisc):'—'}</span></div>`;
-  h+=`<div class="cmp-trow"><span class="k">MBS rewards</span><span class="v">${tMbs>0?'−'+money(tMbs):'—'}</span></div>`;
-  h+=`<div class="cmp-trow"><span class="k">Tax refund <em>(combined)</em></span><span class="v">${tRefund>0?'−'+money(tRefund):'—'}</span></div>`;
-  h+=`<div class="cmp-trow"><span class="k">Total saved</span><span class="v">${money(tSaved)}</span></div>`;
-  h+=`<div class="cmp-trow final"><span class="k">Final</span><span class="v">${money(tNet)} <em>· ${yuan(tRmb)}</em></span></div>`;
+  h+=`<div class="cmp-tot-head">${t('totalOf',{n:cols})}</div>`;
+  h+=`<div class="cmp-trow"><span class="k">${t('amountPaid')}</span><span class="v">${money(tAfter)}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">${t('promoDiscount')}</span><span class="v">${tDisc>0?'−'+money(tDisc):'—'}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">${t('mbsRewards')}</span><span class="v">${tMbs>0?'−'+money(tMbs):'—'}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">${t('taxRefund')} <em>${t('combined')}</em></span><span class="v">${tRefund>0?'−'+money(tRefund):'—'}</span></div>`;
+  h+=`<div class="cmp-trow"><span class="k">${t('totalSaved')}</span><span class="v">${money(tSaved)}</span></div>`;
+  h+=`<div class="cmp-trow final"><span class="k">${t('final')}</span><span class="v">${money(tNet)} <em>· ${yuan(tRmb)}</em></span></div>`;
   h+=`</div>`;
   panel.innerHTML=h;
   $('cmpCloseBtn').onclick=()=>{compareSet.clear();render();};
@@ -645,7 +736,8 @@ function saveState(){
     const blob={
       settings:Object.fromEntries(SETTING_IDS.map(id=>[id,$(id).value])),
       rows:rows,
-      amt:$('amt').value
+      amt:$('amt').value,
+      lang:LANG
     };
     localStorage.setItem(STORAGE_KEY,JSON.stringify(blob));
   }catch(e){}
@@ -667,6 +759,7 @@ function loadState(){
     }
     if(stored&&Array.isArray(stored.rows))rows=stored.rows.filter(r=>r&&typeof r.amount==='number');
     if(stored&&typeof stored.amt==='string')$('amt').value=stored.amt;
+    if(stored&&(stored.lang==='en'||stored.lang==='hant'||stored.lang==='hans'))LANG=stored.lang;
   }catch(e){}
 }
 function renderLive(){
@@ -677,22 +770,22 @@ function renderLive(){
   const pc=r.a>0?(r.saved/r.a*100).toFixed(1):'0';
   box.innerHTML=`<div class="live-box">
     <div class="live-top">
-      <div><span class="lbl">Real cost of ${money(r.a)}</span><div class="v">${money(r.net)}</div></div>
+      <div><span class="lbl">${t('live.realcost',{x:money(r.a)})}</span><div class="v">${money(r.net)}</div></div>
       <div class="rmb">${yuan(r.netRmb)}</div>
     </div>
     <div class="live-brk">
-      ${r.disc>0?`<span>Promo <span class="s">(${promoLabel(s)})</span> <b>−${money(r.disc)}</b></span>`:''}
-      <span>MBS <span class="s">(${mbsLabel(s)})</span> <b>−${money(r.mbs)}</b></span>
-      <span>GST <span class="s">(${refundLabel(s)})</span> <b>−${money(r.refund)}</b></span>
-      <span>Saved <b>${money(r.saved)} · ${pc}%</b></span>
-      <span>FX <span class="s">(¥${s.fx})</span></span>
+      ${r.disc>0?`<span>${t('promo')} <span class="s">(${promoLabel(s)})</span> <b>−${money(r.disc)}</b></span>`:''}
+      <span>${t('mbs')} <span class="s">(${mbsLabel(s)})</span> <b>−${money(r.mbs)}</b></span>
+      <span>${t('gst')} <span class="s">(${refundLabel(s)})</span> <b>−${money(r.refund)}</b></span>
+      <span>${t('saved')} <b>${money(r.saved)} · ${pc}%</b></span>
+      <span>${t('fx')} <span class="s">(¥${s.fx})</span></span>
     </div>
   </div>`;
   saveState();
 }
 function render(){
   const L=$('list');
-  if(!rows.length){compareSet.clear();L.innerHTML='<div class="empty">Saved entries will appear here.</div>';$('clearBtn').classList.add('hidden');renderCompare();updateToggles();saveState();return;}
+  if(!rows.length){compareSet.clear();L.innerHTML='<div class="empty">'+t('empty')+'</div>';$('clearBtn').classList.add('hidden');renderCompare();updateToggles();saveState();return;}
   let h='';
   for(let i=rows.length-1;i>=0;i--){
     const row=rows[i];
@@ -700,23 +793,23 @@ function render(){
     const pc=r.a>0?(r.saved/r.a*100).toFixed(1):'0';
     h+=`<div class="rcard${compareSet.has(row)?' compare-on':''}" data-i="${i}">
       <div class="rcard-head">
-        <span class="num"><b>No.</b>${String(i+1).padStart(2,'0')}</span>
-        <button class="del" data-i="${i}">Remove</button>
+        <span class="num"><b>${t('num')}</b>${String(i+1).padStart(2,'0')}</span>
+        <button class="del" data-i="${i}">${t('remove')}</button>
       </div>
       <div class="top">
-        <div class="spent"><span class="lbl">Original price</span><b>${money(r.a)}</b></div>
-        <div class="saved-box"><span class="lbl">Total saved</span><div class="v">${money(r.saved)} <span class="pc">${pc}%</span></div></div>
+        <div class="spent"><span class="lbl">${t('originalPrice')}</span><b>${money(r.a)}</b></div>
+        <div class="saved-box"><span class="lbl">${t('totalSaved')}</span><div class="v">${money(r.saved)} <span class="pc">${pc}%</span></div></div>
       </div>
       <div class="breakdown">
-        ${r.disc>0?`<div class="brow subt"><span class="k">Amount Paid</span><span class="val">${money(r.after)} <span class="s">${yuan(r.after*row.fx)}</span></span></div>
-        <div class="brow"><span class="k">Promo discount <span class="s">(${promoLabel(row)})</span></span><span class="val">−${money(r.disc)}</span></div>`:''}
-        <div class="brow"><span class="k">MBS rewards <span class="s">(${mbsLabel(row)})</span></span><span class="val">−${money(r.mbs)}</span></div>
-        <div class="brow"><span class="k">GST refund <span class="s">(${refundLabel(row)})</span></span><span class="val">−${money(r.refund)}</span></div>
+        ${r.disc>0?`<div class="brow subt"><span class="k">${t('amountPaid')}</span><span class="val">${money(r.after)} <span class="s">${yuan(r.after*row.fx)}</span></span></div>
+        <div class="brow"><span class="k">${t('promoDiscount')} <span class="s">(${promoLabel(row)})</span></span><span class="val">−${money(r.disc)}</span></div>`:''}
+        <div class="brow"><span class="k">${t('mbsRewards')} <span class="s">(${mbsLabel(row)})</span></span><span class="val">−${money(r.mbs)}</span></div>
+        <div class="brow"><span class="k">${t('gstRefund')} <span class="s">(${refundLabel(row)})</span></span><span class="val">−${money(r.refund)}</span></div>
       </div>
       <div class="final">
-        <div class="lbl">Final Price</div>
+        <div class="lbl">${t('finalPrice')}</div>
         <div class="v">${money(r.net)}</div>
-        <div class="rmb">${yuan(r.netRmb)}<span class="fx">FX ¥${row.fx}</span></div>
+        <div class="rmb">${yuan(r.netRmb)}<span class="fx">${t('fx')} ¥${row.fx}</span></div>
       </div>
     </div>`;
   }
@@ -742,10 +835,9 @@ document.querySelectorAll('.seg button').forEach(b=>{b.onclick=()=>{const seg=b.
 $('toggleMbs').onclick=()=>{$('mbsOn').value=$('mbsOn').value==='on'?'off':'on';updateToggles();renderLive();render();};
 $('toggleTax').onclick=()=>{$('refundOn').value=$('refundOn').value==='on'?'off':'on';updateToggles();renderLive();render();};
 $('clearBtn').onclick=()=>{rows=[];render();};
+document.querySelectorAll('#langSwitch button').forEach(b=>{b.onclick=()=>{LANG=b.dataset.lang;saveState();applyLang();};});
 loadState();
-updateToggles();
-renderLive();
-render();
+applyLang();
 </script>
 </body>
 </html>
